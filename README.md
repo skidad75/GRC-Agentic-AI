@@ -1,5 +1,14 @@
 # 🏥 Healthcare Organization Agentic AI System
 
+[![Streamlit App](https://img.shields.io/badge/🚀%20Launch%20App-grc--cyber--agent.streamlit.app-brightgreen?style=for-the-badge)](https://grc-cyber-agent.streamlit.app/)
+[![Buy Me a Coffee](https://img.shields.io/badge/☕%20Buy%20Me%20a%20Coffee-skidad75-yellow?style=for-the-badge)](https://buymeacoffee.com/skidad75)
+
+**Live Demo:** [https://grc-cyber-agent.streamlit.app/](https://grc-cyber-agent.streamlit.app/)
+
+Support the developer: [Buy Me a Coffee](https://buymeacoffee.com/skidad75)
+
+---
+
 This is a working prototype of a **multi-agent LLM system** designed to support cybersecurity and governance/risk/compliance (GRC) needs in a healthcare organization.
 
 ![Healthcare Organization Agentic AI Interface](static/app_screenshot.png)
@@ -146,3 +155,7 @@ The project includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) 
 ## 📞 Support
 
 For questions or issues, please contact the Healthcare Organization IT Security Team.
+
+---
+
+[![Buy Me a Coffee](https://img.shields.io/badge/☕%20Buy%20Me%20a%20Coffee-skidad75-yellow?style=for-the-badge)](https://buymeacoffee.com/skidad75)
