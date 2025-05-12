@@ -13,4 +13,3 @@ if query:
         result = route_query(query)
         st.success(f"Response from {result['agent'].upper()} Agent")
         st.markdown(result["response"])
-mport streamlit as st
