@@ -1,5 +1,5 @@
 import streamlit as st
-from app.agent_router import route_query
+from agent_router import route_query
 
 st.set_page_config(page_title="Providence Agentic AI", layout="wide")
 
