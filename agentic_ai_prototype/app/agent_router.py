@@ -1,5 +1,5 @@
-from ..agents.cyber_agent import handle_cyber_query
-from ..agents.grc_agent import handle_grc_query
+from agents.cyber_agent import handle_cyber_query
+from agents.grc_agent import handle_grc_query
 
 def determine_agent(query: str) -> str:
     cyber_keywords = ["vulnerability", "attack", "incident", "penetration test", "firewall", "zero-day", "SIEM"]
