@@ -1,9 +1,9 @@
 # 🏥 Healthcare Organization Agentic AI System
 
-[![Streamlit App](https://img.shields.io/badge/🚀%20Launch%20App-grc--cyber--agent.streamlit.app-brightgreen?style=for-the-badge)](https://grc-cyber-agent.streamlit.app/)
+[![Streamlit App](https://img.shields.io/badge/🚀%20Launch%20App-cybergrc--agent.streamlit.app-brightgreen?style=for-the-badge)](https://cybergrc-agent.streamlit.app/)
 [![Buy Me a Coffee](https://img.shields.io/badge/☕%20Buy%20Me%20a%20Coffee-skidad75-yellow?style=for-the-badge)](https://buymeacoffee.com/skidad75)
 
-**Live Demo:** [https://grc-cyber-agent.streamlit.app/](https://grc-cyber-agent.streamlit.app/)
+**Live Demo:** [https://cybergrc-agent.streamlit.app/](https://cybergrc-agent.streamlit.app/)
 
 Support the developer: [Buy Me a Coffee](https://buymeacoffee.com/skidad75)
 
