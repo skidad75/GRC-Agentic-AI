@@ -1,4 +1,10 @@
+import os
+import sys
 import streamlit as st
+
+# Add the project root directory to Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from app.agent_router import route_query
 
 st.set_page_config(page_title="Healthcare Organization Agentic AI", layout="wide")
