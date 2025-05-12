@@ -12,4 +12,4 @@ if query:
     with st.spinner("Thinking..."):
         result = route_query(query)
         st.success(f"Response from {result['agent'].upper()} Agent")
-        st.markdown(result["response"])
+        st.markdown(result["response"]) 
