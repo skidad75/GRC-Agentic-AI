@@ -17,4 +17,12 @@ dependencies:
     - requests
     - beautifulsoup4
     - langchain
-    - tiktoken 
+    - tiktoken
+    - streamlit
+    - plotly
+    - altair
+    - streamlit-extras
+    - streamlit-option-menu
+    - streamlit-chat
+    - streamlit-ace
+    - streamlit-autorefresh 
