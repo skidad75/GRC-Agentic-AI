@@ -1,5 +1,5 @@
 import streamlit as st
-from .agent_router import route_query
+from app.agent_router import route_query
 
 st.set_page_config(page_title="Healthcare Organization Agentic AI", layout="wide")
 
