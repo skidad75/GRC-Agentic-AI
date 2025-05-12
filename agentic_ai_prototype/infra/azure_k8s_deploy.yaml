@@ -1,0 +1,39 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agentic-ai-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: agentic-ai
+  template:
+    metadata:
+      labels:
+        app: agentic-ai
+    spec:
+      containers:
+      - name: agentic-ai-container
+        image: your-dockerhub-username/agentic-ai:latest
+        ports:
+        - containerPort: 8501
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: openai-secret
+              key: api-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agentic-ai-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: agentic-ai
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8501

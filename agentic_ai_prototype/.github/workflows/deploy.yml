@@ -1,0 +1,27 @@
+
+name: Deploy to Azure Kubernetes Service
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: docker build -t agentic-ai:latest .
+
+    - name: Push to ACR (replace with secrets)
+      run: |
+        echo "${{ secrets.ACR_PASSWORD }}" | docker login yourregistry.azurecr.io -u ${{ secrets.ACR_USERNAME }} --password-stdin
+        docker tag agentic-ai:latest yourregistry.azurecr.io/agentic-ai:latest
+        docker push yourregistry.azurecr.io/agentic-ai:latest
+
+    - name: Deploy to AKS
+      uses: azure/k8s-deploy@v4
+      with:
+        manifests: |
+          agentic_ai_prototype/deployment/azure_k8s_deployment.yaml
