@@ -215,6 +215,7 @@ with st.sidebar:
     if st.session_state.community_searches:
         for search in st.session_state.community_searches[:10]:  # Show first 10 searches (most recent)
             st.markdown(f"*{search['query']}*")
+            st.markdown(f"🤖 Agent: {search.get('agent', 'Unknown')}")
             st.markdown(f"📍 {search['location']}")
             st.markdown("---")
     else:
@@ -230,19 +231,23 @@ if user_query:
             try:
                 if kb_choice == "Cyber":
                     response = cyber_query_engine.query(user_query)
+                    agent_used = "Cyber RAG"
                 else:
                     response = grc_query_engine.query(user_query)
+                    agent_used = "GRC RAG"
                 st.write(response.response)
             except Exception as e:
                 st.warning("RAG search failed. Falling back to agent-based search...")
                 result = route_query(user_query)
-                st.success(f"Response from {result['agent'].upper()} Agent")
+                agent_used = result['agent']
+                st.success(f"Response from {agent_used.upper()} Agent")
                 st.markdown(result["response"])
     else:
         # Use agent-based search as fallback
         with st.spinner("Thinking..."):
             result = route_query(user_query)
-            st.success(f"Response from {result['agent'].upper()} Agent")
+            agent_used = result['agent']
+            st.success(f"Response from {agent_used.upper()} Agent")
             st.markdown(result["response"])
 
     # Update community search history if it's a new query
@@ -250,7 +255,8 @@ if user_query:
         # Add new search to the beginning of the list
         st.session_state.community_searches.insert(0, {
             'query': user_query,
-            'location': get_client_location()
+            'location': get_client_location(),
+            'agent': agent_used
         })
         
         # Keep only the last MAX_SEARCHES entries
