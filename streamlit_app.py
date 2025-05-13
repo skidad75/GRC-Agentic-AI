@@ -24,22 +24,18 @@ MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
 
 def get_user_location():
-    """Get user's location based on IP address"""
+    """Get user's location based on IP address using IPinfo token in URL."""
     try:
-        # Get client IP from Streamlit
         client_ip = st.experimental_get_query_params().get("client_ip", [None])[0]
         if not client_ip:
             return "Somewhere in the multiverse..."
-            
-        # Use ipinfo.io with API key from secrets
-        headers = {
-            "Authorization": f"Bearer {st.secrets['ipinfo']['token']}"
-        }
-        response = requests.get(f"https://ipinfo.io/{client_ip}/json", headers=headers)
+        # Use the token in the URL as per IPinfo docs
+        token = st.secrets["ipinfo"]["token"]
+        response = requests.get(f"https://ipinfo.io/{client_ip}/json?token={token}")
         if response.status_code == 200:
             data = response.json()
             city = data.get('city', '')
-            region = data.get('region', '')  # State/Region
+            region = data.get('region', '')
             if city and region:
                 return f"{city}, {region}"
             elif region:
