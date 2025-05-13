@@ -10,7 +10,6 @@ from email.mime.multipart import MIMEMultipart
 import threading
 import json
 import pathlib
-import ipinfo
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -25,20 +24,23 @@ MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
 
 def get_user_location():
-    """Get user's location based on IP address"""
+    """Get user's location based on IP address using ipapi.co"""
     try:
         # Get client IP from Streamlit
         client_ip = st.experimental_get_query_params().get("client_ip", [None])[0]
         if not client_ip:
             return "Unknown Location"
             
-        # Use ipinfo.io to get location (you'll need to sign up for a free API key)
-        handler = ipinfo.getHandler(st.secrets["ipinfo"]["token"])
-        details = handler.getDetails(client_ip)
-        return f"{details.city}, {details.country}" if details.city else "Unknown Location"
+        # Use ipapi.co to get location (free tier)
+        response = requests.get(f"https://ipapi.co/{client_ip}/json/")
+        if response.status_code == 200:
+            data = response.json()
+            city = data.get('city', '')
+            country = data.get('country_name', '')
+            return f"{city}, {country}" if city else "Unknown Location"
     except Exception as e:
         st.error(f"Error getting location: {str(e)}")
-        return "Unknown Location"
+    return "Unknown Location"
 
 def load_community_searches():
     """Load community searches from file"""
