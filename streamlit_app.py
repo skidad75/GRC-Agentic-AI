@@ -50,9 +50,11 @@ try:
     
     st.success("✅ Vector indices built successfully")
     RAG_AVAILABLE = True
+except ImportError:
+    # Silently handle missing llama_index module
+    RAG_AVAILABLE = False
 except Exception as e:
-    st.error(f"❌ RAG functionality is not available: {str(e)}")
-    st.warning("Falling back to agent-based search.")
+    # Handle other potential errors silently
     RAG_AVAILABLE = False
 
 # Add a tag to indicate which approach is being used
