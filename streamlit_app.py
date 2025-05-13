@@ -25,17 +25,14 @@ if project_root not in sys.path:
 # Import after path setup
 from app.agent_router import route_query
 
-# LlamaIndex imports
-from llama_index.core import VectorStoreIndex
-from llama_index.readers.file import SimpleDirectoryReader
-from llama_index.llms.openai import OpenAI
-
-# Constants
-MAX_SEARCHES = 100
-SEARCHES_FILE = "community_searches.json"
-
 # Initialize RAG functionality with fallback
+RAG_AVAILABLE = False
 try:
+    # LlamaIndex imports
+    from llama_index.core import VectorStoreIndex
+    from llama_index.readers.file import SimpleDirectoryReader
+    from llama_index.llms.openai import OpenAI
+    
     # Build the RAG indices with feedback
     st.info("Loading RAG documents...")
     cyber_docs = SimpleDirectoryReader("rag_docs/cyber").load_data()
@@ -57,6 +54,12 @@ except Exception as e:
     st.error(f"❌ RAG functionality is not available: {str(e)}")
     st.warning("Falling back to agent-based search.")
     RAG_AVAILABLE = False
+
+# Add a tag to indicate which approach is being used
+if RAG_AVAILABLE:
+    st.sidebar.markdown("🔍 Using RAG-based search")
+else:
+    st.sidebar.markdown("🤖 Using agent-based search")
 
 def get_public_ip():
     try:
