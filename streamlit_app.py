@@ -98,6 +98,8 @@ with st.sidebar:
 query = st.text_input("Enter your query here:")
 
 if query:
+    # Store the query in session state
+    st.session_state.query = query
     with st.spinner("Thinking..."):
         result = route_query(query)
         st.success(f"Response from {result['agent'].upper()} Agent")
