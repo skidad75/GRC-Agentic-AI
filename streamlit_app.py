@@ -25,6 +25,13 @@ from app.agent_router import route_query
 MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
 
+def get_public_ip():
+    try:
+        response = requests.get('https://api.ipify.org', timeout=5)
+        return response.text
+    except:
+        return None
+
 def get_last_hop_city_region_country():
     try:
         # Run traceroute to a public IP (e.g., 8.8.8.8)
@@ -74,9 +81,7 @@ def get_last_hop_city_region_country():
 
 def get_client_location():
     try:
-        client_ip = st.query_params.get("client_ip", None)
-        if isinstance(client_ip, list):
-            client_ip = client_ip[0]
+        client_ip = get_public_ip()
         if not client_ip:
             return "Somewhere in the multiverse..."
         token = st.secrets["ipinfo"]["token"]
@@ -221,23 +226,4 @@ if query:
         save_community_searches(st.session_state.community_searches)
         st.session_state.last_query = query
         # Force a rerun to update the sidebar
-        st.rerun()
-
-if "client_ip" not in st.session_state:
-    components.html(
-        """
-        <script>
-        fetch('https://api.ipify.org?format=json')
-          .then(response => response.json())
-          .then(data => {
-            const ip = data.ip;
-            const query = new URLSearchParams(window.location.search);
-            if (query.get('client_ip') !== ip) {
-              query.set('client_ip', ip);
-              window.location.search = query.toString();
-            }
-          });
-        </script>
-        """,
-        height=0,
-    ) 
+        st.rerun() 
