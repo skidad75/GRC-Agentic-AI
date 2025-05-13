@@ -1,12 +1,18 @@
-
 # Dockerfile for Streamlit App
 FROM python:3.10-slim
 
 WORKDIR /app
 
+# Install system dependencies for PyAudio
+RUN apt-get update && apt-get install -y \
+    portaudio19-dev \
+    python3-pyaudio \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY . /app
 
-RUN pip install --no-cache-dir streamlit openai faiss-cpu
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8501
 
