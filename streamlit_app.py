@@ -1,6 +1,10 @@
 import os
 import sys
 import streamlit as st
+
+# Set up the Streamlit page - MUST be the first Streamlit command
+st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
+
 import requests
 import time
 from datetime import datetime
@@ -187,8 +191,6 @@ if st.secrets.get("monitoring", {}).get("enabled", False):
     health_check_thread.start()
 
 # Set up the Streamlit page
-st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
-
 st.title("🧠 Cyber GRC Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
 
