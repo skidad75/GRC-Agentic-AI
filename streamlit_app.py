@@ -72,6 +72,32 @@ def get_last_hop_city_region_country():
         st.info(f"Error tracing route: {str(e)}")
         return "Somewhere in the multiverse..."
 
+def get_client_location():
+    try:
+        client_ip = st.query_params.get("client_ip", None)
+        if isinstance(client_ip, list):
+            client_ip = client_ip[0]
+        if not client_ip:
+            return "Somewhere in the multiverse..."
+        token = st.secrets["ipinfo"]["token"]
+        response = requests.get(f"https://ipinfo.io/{client_ip}/json?token={token}")
+        if response.status_code == 200:
+            data = response.json()
+            city = data.get('city', '')
+            region = data.get('region', '')
+            country = data.get('country', '')
+            location_parts = [part for part in [city, region, country] if part]
+            if location_parts:
+                return ", ".join(location_parts)
+            else:
+                st.info(f"No city/region/country found for IP {client_ip}: {data}")
+        else:
+            st.info(f"IPinfo request failed for {client_ip}: {response.status_code} {response.text}")
+        return "Somewhere in the multiverse..."
+    except Exception as e:
+        st.info(f"Error getting client location: {str(e)}")
+        return "Somewhere in the multiverse..."
+
 def load_community_searches():
     """Load community searches from file"""
     try:
@@ -184,7 +210,7 @@ if query:
         # Add new search to the beginning of the list
         st.session_state.community_searches.insert(0, {
             'query': query,
-            'location': get_last_hop_city_region_country()
+            'location': get_client_location()
         })
         
         # Keep only the last MAX_SEARCHES entries
