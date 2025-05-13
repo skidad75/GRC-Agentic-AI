@@ -7,6 +7,7 @@ from datetime import datetime
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import threading
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -54,13 +55,17 @@ def check_app_health():
             f"The app is not accessible. Error: {str(e)}\nTime: {datetime.now()}"
         )
 
-# Run health check in background with configured interval
-if st.secrets.get("monitoring", {}).get("enabled", False):
-    check_interval = st.secrets.get("monitoring", {}).get("check_interval", 30)
+def run_health_check():
     while True:
         check_app_health()
-        time.sleep(check_interval)
+        time.sleep(st.secrets.get("monitoring", {}).get("check_interval", 30))
 
+# Start health check in background thread if monitoring is enabled
+if st.secrets.get("monitoring", {}).get("enabled", False):
+    health_check_thread = threading.Thread(target=run_health_check, daemon=True)
+    health_check_thread.start()
+
+# Set up the Streamlit page
 st.set_page_config(page_title="Healthcare Organization Agentic AI", layout="wide")
 
 st.title("🧠 Healthcare Organization Agentic AI Assistant")
