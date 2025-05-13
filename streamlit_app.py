@@ -12,7 +12,7 @@ import json
 import pathlib
 import streamlit.components.v1 as components
 import subprocess
-from llama_index.readers import SimpleDirectoryReader
+from llama_index.core import SimpleDirectoryReader
 from llama_index.indices.vector_store import VectorStoreIndex
 from llama_index.service_context import ServiceContext
 from llama_index.llms.openai import OpenAI
