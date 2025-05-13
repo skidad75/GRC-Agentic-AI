@@ -11,6 +11,7 @@ import threading
 import json
 import pathlib
 import streamlit.components.v1 as components
+import subprocess
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -24,31 +25,49 @@ from app.agent_router import route_query
 MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
 
-def get_user_location():
-    """Get user's location based on IP address using IPinfo token in URL."""
+def get_last_hop_city():
     try:
-        # Get client IP from Streamlit query params
-        client_ip = st.query_params.get("client_ip", None)
-        if isinstance(client_ip, list):
-            client_ip = client_ip[0]
-        if not client_ip:
+        # Run traceroute to a public IP (e.g., 8.8.8.8)
+        result = subprocess.run(
+            ["traceroute", "-n", "8.8.8.8"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=10
+        )
+        lines = result.stdout.strip().split('\n')
+        if len(lines) < 2:
+            st.info("Traceroute output too short:")
+            st.code(result.stdout)
             return "Somewhere in the multiverse..."
-        # Use the token in the URL as per IPinfo docs
+        # Get the last hop IP address
+        last_hop_line = lines[-1]
+        parts = last_hop_line.split()
+        # Find the first part that looks like an IP address
+        last_hop_ip = None
+        for part in parts:
+            if part.count('.') == 3:
+                last_hop_ip = part
+                break
+        if not last_hop_ip:
+            st.info(f"No valid IP found in last hop line: {last_hop_line}")
+            return "Somewhere in the multiverse..."
+        # Use IPinfo to get city
         token = st.secrets["ipinfo"]["token"]
-        response = requests.get(f"https://ipinfo.io/{client_ip}/json?token={token}")
+        response = requests.get(f"https://ipinfo.io/{last_hop_ip}/json?token={token}")
         if response.status_code == 200:
             data = response.json()
             city = data.get('city', '')
-            region = data.get('region', '')
-            if city and region:
-                return f"{city}, {region}"
-            elif region:
-                return region
-            elif city:
+            if city:
                 return city
+            else:
+                st.info(f"No city found for IP {last_hop_ip}: {data}")
+        else:
+            st.info(f"IPinfo request failed for {last_hop_ip}: {response.status_code} {response.text}")
+        return "Somewhere in the multiverse..."
     except Exception as e:
-        st.error(f"Error getting location: {str(e)}")
-    return "Somewhere in the multiverse..."
+        st.info(f"Error tracing route: {str(e)}")
+        return "Somewhere in the multiverse..."
 
 def load_community_searches():
     """Load community searches from file"""
@@ -162,7 +181,7 @@ if query:
         # Add new search to the beginning of the list
         st.session_state.community_searches.insert(0, {
             'query': query,
-            'location': get_user_location()
+            'location': get_last_hop_city()
         })
         
         # Keep only the last MAX_SEARCHES entries
