@@ -34,16 +34,26 @@ try:
     from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
     from llama_index.llms.openai import OpenAI
     
-    # Build the RAG indices
+    # Build the RAG indices with feedback
+    st.info("Loading RAG documents...")
     cyber_docs = SimpleDirectoryReader("rag_docs/cyber").load_data()
     grc_docs = SimpleDirectoryReader("rag_docs/grc").load_data()
-    cyber_index = VectorStoreIndex.from_documents(cyber_docs)
-    grc_index = VectorStoreIndex.from_documents(grc_docs)
-    cyber_query_engine = cyber_index.as_query_engine()
-    grc_query_engine = grc_index.as_query_engine()
+    
+    # Show document loading status
+    st.success(f"✅ Loaded {len(cyber_docs)} Cyber documents and {len(grc_docs)} GRC documents")
+    
+    # Build indices
+    with st.spinner("Building vector indices..."):
+        cyber_index = VectorStoreIndex.from_documents(cyber_docs)
+        grc_index = VectorStoreIndex.from_documents(grc_docs)
+        cyber_query_engine = cyber_index.as_query_engine()
+        grc_query_engine = grc_index.as_query_engine()
+    
+    st.success("✅ Vector indices built successfully")
     RAG_AVAILABLE = True
 except Exception as e:
-    st.warning("RAG functionality is not available. Falling back to agent-based search.")
+    st.error(f"❌ RAG functionality is not available: {str(e)}")
+    st.warning("Falling back to agent-based search.")
     RAG_AVAILABLE = False
 
 def get_public_ip():
@@ -255,14 +265,18 @@ if user_query:
             with st.spinner("Retrieving answer from curated docs..."):
                 try:
                     if kb_choice == "Cyber":
+                        st.info("🔍 Searching Cyber knowledge base...")
                         response = cyber_query_engine.query(user_query)
                         agent_used = "Cyber RAG"
                     else:
+                        st.info("🔍 Searching GRC knowledge base...")
                         response = grc_query_engine.query(user_query)
                         agent_used = "GRC RAG"
+                    st.success("✅ Found relevant information in knowledge base")
                     st.write(response.response)
                 except Exception as e:
-                    st.warning("RAG search failed. Falling back to agent-based search...")
+                    st.warning(f"RAG search failed: {str(e)}")
+                    st.warning("Falling back to agent-based search...")
                     # Force the specific agent
                     result = route_query(user_query, force_agent=kb_choice.lower())
                     agent_used = result['agent']
