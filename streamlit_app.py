@@ -215,7 +215,11 @@ with st.sidebar:
     if st.session_state.community_searches:
         for search in st.session_state.community_searches[:10]:  # Show first 10 searches (most recent)
             st.markdown(f"*{search['query']}*")
-            st.markdown(f"🤖 Agent: {search.get('agent', 'Unknown')}")
+            # Get agent info with better fallback handling
+            agent_info = search.get('agent', 'Unknown')
+            if agent_info == 'Unknown' and 'kb_choice' in search:
+                agent_info = f"{search['kb_choice']} RAG"
+            st.markdown(f"🤖 Agent: {agent_info}")
             st.markdown(f"📍 {search['location']}")
             st.markdown("---")
     else:
@@ -253,11 +257,13 @@ if user_query:
     # Update community search history if it's a new query
     if user_query != st.session_state.last_query:
         # Add new search to the beginning of the list
-        st.session_state.community_searches.insert(0, {
+        search_entry = {
             'query': user_query,
             'location': get_client_location(),
-            'agent': agent_used
-        })
+            'agent': agent_used,
+            'kb_choice': kb_choice  # Store the knowledge base choice
+        }
+        st.session_state.community_searches.insert(0, search_entry)
         
         # Keep only the last MAX_SEARCHES entries
         if len(st.session_state.community_searches) > MAX_SEARCHES:
