@@ -1,4 +1,4 @@
-# 🏥 Healthcare Organization Agentic AI System
+# 🛡️ Cyber GRC Agentic AI System
 
 [![Streamlit App](https://img.shields.io/badge/🚀%20Launch%20App-cybergrc--agent.streamlit.app-brightgreen?style=for-the-badge)](https://cybergrc-agent.streamlit.app/)
 [![Buy Me a Coffee](https://img.shields.io/badge/☕%20Buy%20Me%20a%20Coffee-skidad75-yellow?style=for-the-badge)](https://buymeacoffee.com/skidad75)
@@ -9,23 +9,23 @@ Support the developer: [Buy Me a Coffee](https://buymeacoffee.com/skidad75)
 
 ---
 
-This is a working prototype of a **multi-agent LLM system** designed to support cybersecurity and governance/risk/compliance (GRC) needs in a healthcare organization.
+This is a working prototype of a **multi-agent LLM system** designed to support cybersecurity and governance/risk/compliance (GRC) needs.
 
-![Healthcare Organization Agentic AI Interface](static/app_screenshot.png)
+![Cyber GRC Agentic AI Interface](static/app_screenshot.png)
 
 ---
 
 ## 🧠 Design Overview
 
 **Purpose**:  
-To provide a Streamlit-based front-end for querying Cybersecurity and GRC-focused AI agents that reason over healthcare organization-specific policy, architecture diagrams, and risk inputs.
+To provide a Streamlit-based front-end for querying Cybersecurity and GRC-focused AI agents that reason over policy, architecture diagrams, and risk inputs.
 
 ### 🏗️ Architecture Components
 - 🤖 **Cyber Agent**: Ingests threat intel, attack patterns, and internal architecture to offer risk insights.
-- 🛡️ **GRC Agent**: Specializes in frameworks like HIPAA, NIST, HITRUST, and healthcare organization internal policies.
+- 🛡️ **GRC Agent**: Specializes in frameworks like NIST, ISO, and internal policies.
 - 🔀 **Agent Router**: Directs queries based on keywords or intent to the appropriate agent.
 - 📚 **RAG (Retrieval-Augmented Generation)**: All agents use vectorized document embeddings to enrich LLM responses.
-- 💻 **Streamlit Front-End**: Matches healthcare organization branding, enables file input, interactive query, and PDF/Word report generation.
+- 💻 **Streamlit Front-End**: Features modern UI, enables file input, interactive query, and PDF/Word report generation.
 
 ---
 
@@ -146,15 +146,15 @@ The project includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) 
 ## 🔒 Security Notes
 
 - 🔑 Use Azure Key Vault or K8s Secrets for managing OpenAI API keys
-- 🏥 Follow healthcare organization's internal guidelines for LLM data inputs and logging
-- 📜 Ensure all data processing complies with HIPAA requirements
+- 🛡️ Follow security best practices for LLM data inputs and logging
+- 📜 Ensure all data processing complies with security requirements
 - 🛡️ Implement proper access controls and authentication
 
 ---
 
 ## 📞 Support
 
-For questions or issues, please contact the Healthcare Organization IT Security Team.
+For questions or issues, please contact the Cyber GRC Team.
 
 ---
 

@@ -66,9 +66,9 @@ if st.secrets.get("monitoring", {}).get("enabled", False):
     health_check_thread.start()
 
 # Set up the Streamlit page
-st.set_page_config(page_title="Healthcare Organization Agentic AI", layout="wide")
+st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
 
-st.title("🧠 Healthcare Organization Agentic AI Assistant")
+st.title("🧠 Cyber GRC Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
 
 # Add Buy Me a Coffee link

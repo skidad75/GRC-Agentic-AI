@@ -1,5 +1,4 @@
-
-# Azure Kubernetes Deployment for Providence Agentic AI
+# Azure Kubernetes Deployment for Cyber GRC Agentic AI
 
 ## Instructions
 
