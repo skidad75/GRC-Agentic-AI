@@ -100,16 +100,18 @@ with st.sidebar:
 query = st.text_input("Enter your query here:")
 
 if query:
-    # Process the query regardless of whether it's the same as last time
+    # Process the query
     with st.spinner("Thinking..."):
         result = route_query(query)
         st.success(f"Response from {result['agent'].upper()} Agent")
         st.markdown(result["response"])
-        
-        # Only add to history if it's a new query
-        if query != st.session_state.last_query:
-            st.session_state.community_searches.append({
-                'query': query,
-                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            })
-            st.session_state.last_query = query 
+    
+    # Update community search history if it's a new query
+    if query != st.session_state.last_query:
+        st.session_state.community_searches.append({
+            'query': query,
+            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+        st.session_state.last_query = query
+        # Force a rerun to update the sidebar
+        st.rerun() 
