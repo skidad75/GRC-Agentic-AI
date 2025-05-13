@@ -25,7 +25,7 @@ from app.agent_router import route_query
 MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
 
-def get_last_hop_city():
+def get_last_hop_country():
     try:
         # Run traceroute to a public IP (e.g., 8.8.8.8)
         result = subprocess.run(
@@ -43,7 +43,6 @@ def get_last_hop_city():
         # Get the last hop IP address
         last_hop_line = lines[-1]
         parts = last_hop_line.split()
-        # Find the first part that looks like an IP address
         last_hop_ip = None
         for part in parts:
             if part.count('.') == 3:
@@ -52,18 +51,21 @@ def get_last_hop_city():
         if not last_hop_ip:
             st.info(f"No valid IP found in last hop line: {last_hop_line}")
             return "Somewhere in the multiverse..."
-        # Use IPinfo to get city
+        # Use IPinfo Lite to get country
         token = st.secrets["ipinfo"]["token"]
-        response = requests.get(f"https://ipinfo.io/{last_hop_ip}/json?token={token}")
+        response = requests.get(f"https://api.ipinfo.io/lite/{last_hop_ip}?token={token}")
         if response.status_code == 200:
             data = response.json()
-            city = data.get('city', '')
-            if city:
-                return city
+            country = data.get('country', '')
+            country_code = data.get('country_code', '')
+            if country:
+                return country
+            elif country_code:
+                return country_code
             else:
-                st.info(f"No city found for IP {last_hop_ip}: {data}")
+                st.info(f"No country found for IP {last_hop_ip}: {data}")
         else:
-            st.info(f"IPinfo request failed for {last_hop_ip}: {response.status_code} {response.text}")
+            st.info(f"IPinfo Lite request failed for {last_hop_ip}: {response.status_code} {response.text}")
         return "Somewhere in the multiverse..."
     except Exception as e:
         st.info(f"Error tracing route: {str(e)}")
@@ -181,7 +183,7 @@ if query:
         # Add new search to the beginning of the list
         st.session_state.community_searches.insert(0, {
             'query': query,
-            'location': get_last_hop_city()
+            'location': get_last_hop_country()
         })
         
         # Keep only the last MAX_SEARCHES entries
