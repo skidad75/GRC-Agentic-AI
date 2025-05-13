@@ -83,8 +83,8 @@ st.markdown("""
 # Initialize session state for community searches if it doesn't exist
 if 'community_searches' not in st.session_state:
     st.session_state.community_searches = []
-if 'query' not in st.session_state:
-    st.session_state.query = ""
+if 'last_query' not in st.session_state:
+    st.session_state.last_query = ""
 
 # Sidebar for community searches
 with st.sidebar:
@@ -99,15 +99,16 @@ with st.sidebar:
 
 query = st.text_input("Enter your query here:")
 
-if query:
-    # Store the query in session state
-    st.session_state.query = query
+if query and query != st.session_state.last_query:
+    # Store the current query as last query
+    st.session_state.last_query = query
+    
     with st.spinner("Thinking..."):
         result = route_query(query)
         st.success(f"Response from {result['agent'].upper()} Agent")
         st.markdown(result["response"])
         
-        # Add the search to community history immediately after processing
+        # Add the search to community history
         st.session_state.community_searches.append({
             'query': query,
             'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
