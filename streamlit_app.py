@@ -25,16 +25,17 @@ if project_root not in sys.path:
 # Import after path setup
 from app.agent_router import route_query
 
+# LlamaIndex imports moved here
+from llama_index.core import VectorStoreIndex
+from llama_index.readers.file import SimpleDirectoryReader
+from llama_index.llms.openai import OpenAI
+
 # Constants
 MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
 
 # Initialize RAG functionality with fallback
 try:
-    from llama_index.core import VectorStoreIndex
-    from llama_index.readers.file import SimpleDirectoryReader
-    from llama_index.llms.openai import OpenAI
-    
     # Build the RAG indices with feedback
     st.info("Loading RAG documents...")
     cyber_docs = SimpleDirectoryReader("rag_docs/cyber").load_data()
