@@ -29,7 +29,7 @@ def get_user_location():
         # Get client IP from Streamlit
         client_ip = st.experimental_get_query_params().get("client_ip", [None])[0]
         if not client_ip:
-            return "Unknown Location"
+            return "Somewhere in the multiverse..."
             
         # Use ipinfo.io with API key from secrets
         headers = {
@@ -39,11 +39,16 @@ def get_user_location():
         if response.status_code == 200:
             data = response.json()
             city = data.get('city', '')
-            country = data.get('country', '')
-            return f"{city}, {country}" if city else "Unknown Location"
+            region = data.get('region', '')  # State/Region
+            if city and region:
+                return f"{city}, {region}"
+            elif region:
+                return region
+            elif city:
+                return city
     except Exception as e:
         st.error(f"Error getting location: {str(e)}")
-    return "Unknown Location"
+    return "Somewhere in the multiverse..."
 
 def load_community_searches():
     """Load community searches from file"""
