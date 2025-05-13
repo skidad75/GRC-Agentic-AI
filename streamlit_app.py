@@ -8,6 +8,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import threading
+import json
+import pathlib
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -16,6 +18,28 @@ if project_root not in sys.path:
 
 # Import after path setup
 from app.agent_router import route_query
+
+# Constants
+MAX_SEARCHES = 100
+SEARCHES_FILE = "community_searches.json"
+
+def load_community_searches():
+    """Load community searches from file"""
+    try:
+        if os.path.exists(SEARCHES_FILE):
+            with open(SEARCHES_FILE, 'r') as f:
+                return json.load(f)
+    except Exception as e:
+        st.error(f"Error loading community searches: {str(e)}")
+    return []
+
+def save_community_searches(searches):
+    """Save community searches to file"""
+    try:
+        with open(SEARCHES_FILE, 'w') as f:
+            json.dump(searches, f)
+    except Exception as e:
+        st.error(f"Error saving community searches: {str(e)}")
 
 # Health check function
 def send_alert_email(subject, message):
@@ -82,7 +106,7 @@ st.markdown("""
 
 # Initialize session state for community searches if it doesn't exist
 if 'community_searches' not in st.session_state:
-    st.session_state.community_searches = []
+    st.session_state.community_searches = load_community_searches()
 if 'last_query' not in st.session_state:
     st.session_state.last_query = ""
 
@@ -108,10 +132,18 @@ if query:
     
     # Update community search history if it's a new query
     if query != st.session_state.last_query:
-        st.session_state.community_searches.append({
+        # Add new search to the beginning of the list
+        st.session_state.community_searches.insert(0, {
             'query': query,
             'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         })
+        
+        # Keep only the last MAX_SEARCHES entries
+        if len(st.session_state.community_searches) > MAX_SEARCHES:
+            st.session_state.community_searches = st.session_state.community_searches[:MAX_SEARCHES]
+        
+        # Save to file
+        save_community_searches(st.session_state.community_searches)
         st.session_state.last_query = query
         # Force a rerun to update the sidebar
         st.rerun() 
