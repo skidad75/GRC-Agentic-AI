@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 import threading
 import json
 import pathlib
+import ipinfo
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -22,6 +23,22 @@ from app.agent_router import route_query
 # Constants
 MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
+
+def get_user_location():
+    """Get user's location based on IP address"""
+    try:
+        # Get client IP from Streamlit
+        client_ip = st.experimental_get_query_params().get("client_ip", [None])[0]
+        if not client_ip:
+            return "Unknown Location"
+            
+        # Use ipinfo.io to get location (you'll need to sign up for a free API key)
+        handler = ipinfo.getHandler(st.secrets["ipinfo"]["token"])
+        details = handler.getDetails(client_ip)
+        return f"{details.city}, {details.country}" if details.city else "Unknown Location"
+    except Exception as e:
+        st.error(f"Error getting location: {str(e)}")
+        return "Unknown Location"
 
 def load_community_searches():
     """Load community searches from file"""
@@ -114,9 +131,9 @@ if 'last_query' not in st.session_state:
 with st.sidebar:
     st.subheader("🔍 Community Search History")
     if st.session_state.community_searches:
-        for search in reversed(st.session_state.community_searches[-10:]):  # Show last 10 searches
-            st.markdown(f"**{search['timestamp']}**")
+        for search in st.session_state.community_searches[:10]:  # Show first 10 searches (most recent)
             st.markdown(f"*{search['query']}*")
+            st.markdown(f"📍 {search['location']}")
             st.markdown("---")
     else:
         st.info("No searches yet. Be the first to search!")
@@ -135,7 +152,7 @@ if query:
         # Add new search to the beginning of the list
         st.session_state.community_searches.insert(0, {
             'query': query,
-            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            'location': get_user_location()
         })
         
         # Keep only the last MAX_SEARCHES entries
