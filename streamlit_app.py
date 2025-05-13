@@ -31,7 +31,8 @@ SEARCHES_FILE = "community_searches.json"
 
 # Initialize RAG functionality with fallback
 try:
-    from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+    from llama_index.core import VectorStoreIndex
+    from llama_index.readers.file import SimpleDirectoryReader
     from llama_index.llms.openai import OpenAI
     
     # Build the RAG indices with feedback
