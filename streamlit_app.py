@@ -83,6 +83,8 @@ st.markdown("""
 # Initialize session state for community searches if it doesn't exist
 if 'community_searches' not in st.session_state:
     st.session_state.community_searches = []
+if 'query' not in st.session_state:
+    st.session_state.query = ""
 
 # Sidebar for community searches
 with st.sidebar:
@@ -104,10 +106,11 @@ if query:
         result = route_query(query)
         st.success(f"Response from {result['agent'].upper()} Agent")
         st.markdown(result["response"])
-
-# Add the search to community history when a query is made
-if 'query' in st.session_state and st.session_state.query:
-    st.session_state.community_searches.append({
-        'query': st.session_state.query,
-        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }) 
+        
+        # Add the search to community history immediately after processing
+        st.session_state.community_searches.append({
+            'query': query,
+            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+        # Force a rerun to update the sidebar
+        st.experimental_rerun() 
