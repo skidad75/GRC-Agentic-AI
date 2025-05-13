@@ -13,6 +13,7 @@ project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, project_root)
 
 from app.agent_router import route_query
+from app.main import *
 
 # Health check function
 def send_alert_email(subject, message):
@@ -70,10 +71,32 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# Initialize session state for community searches if it doesn't exist
+if 'community_searches' not in st.session_state:
+    st.session_state.community_searches = []
+
+# Sidebar for community searches
+with st.sidebar:
+    st.subheader("🔍 Community Search History")
+    if st.session_state.community_searches:
+        for search in reversed(st.session_state.community_searches[-10:]):  # Show last 10 searches
+            st.markdown(f"**{search['timestamp']}**")
+            st.markdown(f"*{search['query']}*")
+            st.markdown("---")
+    else:
+        st.info("No searches yet. Be the first to search!")
+
 query = st.text_input("Enter your query here:")
 
 if query:
     with st.spinner("Thinking..."):
         result = route_query(query)
         st.success(f"Response from {result['agent'].upper()} Agent")
-        st.markdown(result["response"]) 
+        st.markdown(result["response"])
+
+# Add the search to community history when a query is made
+if 'query' in st.session_state and st.session_state.query:
+    st.session_state.community_searches.append({
+        'query': st.session_state.query,
+        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }) 

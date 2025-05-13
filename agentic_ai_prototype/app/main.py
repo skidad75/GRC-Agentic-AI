@@ -1,7 +1,11 @@
 import streamlit as st
 import tempfile
 import os
+from dotenv import load_dotenv
 from .agent_router import route_query
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Try importing voice-related packages, but don't fail if they're not available
 try:
