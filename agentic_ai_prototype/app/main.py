@@ -3,6 +3,10 @@ import tempfile
 import os
 from .agent_router import route_query
 
+# Initialize session state for search history if it doesn't exist
+if 'search_history' not in st.session_state:
+    st.session_state.search_history = []
+
 # Try importing voice-related packages, but don't fail if they're not available
 try:
     import speech_recognition as sr
@@ -15,6 +19,12 @@ st.set_page_config(page_title="Healthcare Organization Agentic AI", layout="wide
 
 st.title("🧠 Healthcare Organization Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
+
+# Display recent searches
+if st.session_state.search_history:
+    st.subheader("🔍 Recent Searches")
+    for search in reversed(st.session_state.search_history[-5:]):  # Show last 5 searches
+        st.markdown(f"*{search}*")
 
 # Sample prompts section
 st.subheader("📝 Sample Prompts")
@@ -63,6 +73,13 @@ else:
 query = st.text_input("Enter your query here:", value=st.session_state.get("query", ""))
 
 if query:
+    # Add query to search history
+    if query not in st.session_state.search_history:
+        st.session_state.search_history.append(query)
+        # Keep only the last 10 searches
+        if len(st.session_state.search_history) > 10:
+            st.session_state.search_history.pop(0)
+            
     with st.spinner("Thinking..."):
         result = route_query(query)
         st.success(f"Response from {result['agent'].upper()} Agent")
