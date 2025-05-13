@@ -10,7 +10,8 @@ from email.mime.multipart import MIMEMultipart
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, project_root)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 # Import after path setup
 from app.agent_router import route_query

@@ -1,5 +1,5 @@
-from ..agents.cyber_agent import handle_cyber_query
-from ..agents.grc_agent import handle_grc_query
+from agents.cyber_agent import handle_cyber_query
+from agents.grc_agent import handle_grc_query
 
 def route_query(query: str) -> dict:
     # Simple keyword-based routing
