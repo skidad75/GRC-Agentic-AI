@@ -12,8 +12,6 @@ import json
 import pathlib
 import streamlit.components.v1 as components
 import subprocess
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
-from llama_index.llms.openai import OpenAI
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -26,6 +24,23 @@ from app.agent_router import route_query
 # Constants
 MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
+
+# Initialize RAG functionality with fallback
+try:
+    from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+    from llama_index.llms.openai import OpenAI
+    
+    # Build the RAG indices
+    cyber_docs = SimpleDirectoryReader("rag_docs/cyber").load_data()
+    grc_docs = SimpleDirectoryReader("rag_docs/grc").load_data()
+    cyber_index = VectorStoreIndex.from_documents(cyber_docs)
+    grc_index = VectorStoreIndex.from_documents(grc_docs)
+    cyber_query_engine = cyber_index.as_query_engine()
+    grc_query_engine = grc_index.as_query_engine()
+    RAG_AVAILABLE = True
+except Exception as e:
+    st.warning("RAG functionality is not available. Falling back to agent-based search.")
+    RAG_AVAILABLE = False
 
 def get_public_ip():
     try:
@@ -203,44 +218,36 @@ with st.sidebar:
     else:
         st.info("No searches yet. Be the first to search!")
 
-# 1. Build the index from your curated docs (on startup)
-@st.cache_resource(show_spinner=True)
-def build_rag_index(folder):
-    docs = SimpleDirectoryReader(input_dir=folder, recursive=True).load_data()
-    index = VectorStoreIndex.from_documents(docs)
-    return index
-
-cyber_docs = SimpleDirectoryReader("rag_docs/cyber").load_data()
-grc_docs = SimpleDirectoryReader("rag_docs/grc").load_data()
-cyber_index = VectorStoreIndex.from_documents(cyber_docs)
-grc_index = VectorStoreIndex.from_documents(grc_docs)
-cyber_query_engine = cyber_index.as_query_engine()
-grc_query_engine = grc_index.as_query_engine()
-
 st.subheader("Ask the Cyber or GRC Knowledge Base")
 kb_choice = st.radio("Choose a knowledge base:", ["Cyber", "GRC"])
-user_query = st.text_input("Enter your Cyber or GRC question (RAG):")
+user_query = st.text_input("Enter your Cyber or GRC question:")
 
 if user_query:
-    with st.spinner("Retrieving answer from curated docs..."):
-        if kb_choice == "Cyber":
-            response = cyber_query_engine.query(user_query)
-        else:
-            response = grc_query_engine.query(user_query)
-        st.write(response.response)
+    if RAG_AVAILABLE:
+        with st.spinner("Retrieving answer from curated docs..."):
+            try:
+                if kb_choice == "Cyber":
+                    response = cyber_query_engine.query(user_query)
+                else:
+                    response = grc_query_engine.query(user_query)
+                st.write(response.response)
+            except Exception as e:
+                st.warning("RAG search failed. Falling back to agent-based search...")
+                result = route_query(user_query)
+                st.success(f"Response from {result['agent'].upper()} Agent")
+                st.markdown(result["response"])
+    else:
+        # Use agent-based search as fallback
+        with st.spinner("Thinking..."):
+            result = route_query(user_query)
+            st.success(f"Response from {result['agent'].upper()} Agent")
+            st.markdown(result["response"])
 
-if query:
-    # Process the query
-    with st.spinner("Thinking..."):
-        result = route_query(query)
-        st.success(f"Response from {result['agent'].upper()} Agent")
-        st.markdown(result["response"])
-    
     # Update community search history if it's a new query
-    if query != st.session_state.last_query:
+    if user_query != st.session_state.last_query:
         # Add new search to the beginning of the list
         st.session_state.community_searches.insert(0, {
-            'query': query,
+            'query': user_query,
             'location': get_client_location()
         })
         
@@ -250,6 +257,6 @@ if query:
         
         # Save to file
         save_community_searches(st.session_state.community_searches)
-        st.session_state.last_query = query
+        st.session_state.last_query = user_query
         # Force a rerun to update the sidebar
         st.rerun() 
