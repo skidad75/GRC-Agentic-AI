@@ -12,6 +12,9 @@ import json
 import pathlib
 import streamlit.components.v1 as components
 import subprocess
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, ServiceContext
+from llama_index.llms.openai import OpenAI
+from llama_index.embeddings.openai import OpenAIEmbedding
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -201,7 +204,33 @@ with st.sidebar:
     else:
         st.info("No searches yet. Be the first to search!")
 
-query = st.text_input("Enter your query here:")
+# 1. Build the index from your curated docs (on startup)
+@st.cache_resource(show_spinner=True)
+def build_rag_index(folder):
+    docs = SimpleDirectoryReader(input_dir=folder, recursive=True).load_data()
+    service_context = ServiceContext.from_defaults(
+        llm=OpenAI(api_key=st.secrets["openai"]["api_key"]),
+        embed_model=OpenAIEmbedding(api_key=st.secrets["openai"]["api_key"])
+    )
+    index = VectorStoreIndex.from_documents(docs, service_context=service_context)
+    return index
+
+cyber_index = build_rag_index("rag_docs/cyber")
+grc_index = build_rag_index("rag_docs/grc")
+cyber_query_engine = cyber_index.as_query_engine()
+grc_query_engine = grc_index.as_query_engine()
+
+st.subheader("Ask the Cyber or GRC Knowledge Base")
+kb_choice = st.radio("Choose a knowledge base:", ["Cyber", "GRC"])
+user_query = st.text_input("Enter your Cyber or GRC question (RAG):")
+
+if user_query:
+    with st.spinner("Retrieving answer from curated docs..."):
+        if kb_choice == "Cyber":
+            response = cyber_query_engine.query(user_query)
+        else:
+            response = grc_query_engine.query(user_query)
+        st.write(response.response)
 
 if query:
     # Process the query
