@@ -1,7 +1,29 @@
 import streamlit as st
 import tempfile
 import os
+import json
+from datetime import datetime
 from .agent_router import route_query
+
+# File to store shared search history
+SEARCH_HISTORY_FILE = "shared_search_history.json"
+
+@st.cache_data(ttl=300)  # Cache for 5 minutes
+def load_shared_history():
+    try:
+        if os.path.exists(SEARCH_HISTORY_FILE):
+            with open(SEARCH_HISTORY_FILE, 'r') as f:
+                return json.load(f)
+        return []
+    except Exception:
+        return []
+
+def save_shared_history(history):
+    try:
+        with open(SEARCH_HISTORY_FILE, 'w') as f:
+            json.dump(history, f)
+    except Exception:
+        pass  # Silently fail if we can't save
 
 # Initialize session state for search history if it doesn't exist
 if 'search_history' not in st.session_state:
@@ -20,11 +42,16 @@ st.set_page_config(page_title="Healthcare Organization Agentic AI", layout="wide
 st.title("🧠 Healthcare Organization Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
 
-# Display recent searches
-if st.session_state.search_history:
-    st.subheader("🔍 Recent Searches")
-    for search in reversed(st.session_state.search_history[-5:]):  # Show last 5 searches
-        st.markdown(f"*{search}*")
+# Display shared search history
+st.subheader("🔍 Recent Community Searches")
+shared_history = load_shared_history()
+
+if shared_history:
+    # Display searches in a more visible way
+    for search in reversed(shared_history[-5:]):  # Show last 5 searches
+        st.markdown(f"*{search['query']}* - {search['timestamp']}")
+else:
+    st.info("No recent community searches yet. Your search will appear here when you make one!")
 
 # Sample prompts section
 st.subheader("📝 Sample Prompts")
@@ -73,12 +100,20 @@ else:
 query = st.text_input("Enter your query here:", value=st.session_state.get("query", ""))
 
 if query:
-    # Add query to search history
-    if query not in st.session_state.search_history:
-        st.session_state.search_history.append(query)
+    # Add query to shared history
+    current_history = load_shared_history()
+    new_entry = {
+        'query': query,
+        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+    
+    # Add new search if it's not the same as the last one
+    if not current_history or current_history[-1]['query'] != query:
+        current_history.append(new_entry)
         # Keep only the last 10 searches
-        if len(st.session_state.search_history) > 10:
-            st.session_state.search_history.pop(0)
+        if len(current_history) > 10:
+            current_history.pop(0)
+        save_shared_history(current_history)
             
     with st.spinner("Thinking..."):
         result = route_query(query)
