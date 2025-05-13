@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 import threading
 import json
 import pathlib
+import streamlit.components.v1 as components
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -172,4 +173,23 @@ if query:
         save_community_searches(st.session_state.community_searches)
         st.session_state.last_query = query
         # Force a rerun to update the sidebar
-        st.rerun() 
+        st.rerun()
+
+if "client_ip" not in st.session_state:
+    components.html(
+        """
+        <script>
+        fetch('https://api.ipify.org?format=json')
+          .then(response => response.json())
+          .then(data => {
+            const ip = data.ip;
+            const query = new URLSearchParams(window.location.search);
+            if (query.get('client_ip') !== ip) {
+              query.set('client_ip', ip);
+              window.location.search = query.toString();
+            }
+          });
+        </script>
+        """,
+        height=0,
+    ) 
