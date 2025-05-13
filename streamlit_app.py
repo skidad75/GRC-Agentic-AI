@@ -26,9 +26,7 @@ if project_root not in sys.path:
 from app.agent_router import route_query
 
 # LlamaIndex imports
-from llama_index.core import VectorStoreIndex
-from llama_index.readers.file import SimpleDirectoryReader
-from llama_index.llms.openai import OpenAI
+from llama_index import VectorStoreIndex, SimpleDirectoryReader, OpenAI
 
 # Constants
 MAX_SEARCHES = 100
