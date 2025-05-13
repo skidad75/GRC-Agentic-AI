@@ -26,7 +26,10 @@ SEARCHES_FILE = "community_searches.json"
 def get_user_location():
     """Get user's location based on IP address using IPinfo token in URL."""
     try:
-        client_ip = st.experimental_get_query_params().get("client_ip", [None])[0]
+        # Get client IP from Streamlit query params
+        client_ip = st.query_params.get("client_ip", None)
+        if isinstance(client_ip, list):
+            client_ip = client_ip[0]
         if not client_ip:
             return "Somewhere in the multiverse..."
         # Use the token in the URL as per IPinfo docs
