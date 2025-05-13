@@ -3,6 +3,7 @@ from openai import OpenAIError
 import os
 from dotenv import load_dotenv
 from agents.shared_tools import query_vector_db, format_rag_prompt
+import streamlit as st
 
 load_dotenv()
 
@@ -17,7 +18,12 @@ CYBER_FALLBACK_RESPONSES = {
 
 def handle_cyber_query(query: str, context: dict = None) -> str:
     try:
-        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        # Get API key from Streamlit secrets
+        api_key = st.secrets["openai"]["api_key"]
+        if not api_key:
+            raise ValueError("OpenAI API key not found in Streamlit secrets")
+            
+        client = openai.OpenAI(api_key=api_key)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[

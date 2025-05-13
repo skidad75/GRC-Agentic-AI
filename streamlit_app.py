@@ -19,7 +19,7 @@ from app.main import *
 def send_alert_email(subject, message):
     sender_email = "skidad75@gmail.com"
     receiver_email = "skidad75@gmail.com"
-    password = st.secrets["email"]["password"]  # Store this in Streamlit secrets
+    password = st.secrets["email"]["password"]
 
     msg = MIMEMultipart()
     msg['From'] = sender_email
@@ -53,9 +53,12 @@ def check_app_health():
             f"The app is not accessible. Error: {str(e)}\nTime: {datetime.now()}"
         )
 
-# Run health check in background
+# Run health check in background with configured interval
 if st.secrets.get("monitoring", {}).get("enabled", False):
-    check_app_health()
+    check_interval = st.secrets.get("monitoring", {}).get("check_interval", 30)
+    while True:
+        check_app_health()
+        time.sleep(check_interval)
 
 st.set_page_config(page_title="Healthcare Organization Agentic AI", layout="wide")
 
