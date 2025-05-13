@@ -12,8 +12,8 @@ from email.mime.multipart import MIMEMultipart
 project_root = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, project_root)
 
+# Import after path setup
 from app.agent_router import route_query
-from app.main import *
 
 # Health check function
 def send_alert_email(subject, message):
