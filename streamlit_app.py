@@ -17,14 +17,14 @@ import pathlib
 import streamlit.components.v1 as components
 import subprocess
 
-# Constants
-SEARCHES_FILE = "community_searches.json"
-MAX_SEARCHES = 100
-
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
+
+# Constants
+SEARCHES_FILE = os.path.join(project_root, "community_searches.json")
+MAX_SEARCHES = 100
 
 # Import after path setup
 from app.agent_router import route_query
