@@ -18,7 +18,12 @@ CYBER_FALLBACK_RESPONSES = {
 
 def handle_cyber_query(query: str, context: dict = None) -> str:
     try:
-        client = openai.OpenAI(api_key=st.secrets["openai"]["api_key"])
+        # Get API key from environment variable first, then fall back to Streamlit secrets
+        api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("openai", {}).get("api_key")
+        if not api_key:
+            raise ValueError("OpenAI API key not found in environment variables or Streamlit secrets")
+            
+        client = openai.OpenAI(api_key=api_key)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
