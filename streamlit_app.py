@@ -24,19 +24,22 @@ MAX_SEARCHES = 100
 SEARCHES_FILE = "community_searches.json"
 
 def get_user_location():
-    """Get user's location based on IP address using ipapi.co"""
+    """Get user's location based on IP address"""
     try:
         # Get client IP from Streamlit
         client_ip = st.experimental_get_query_params().get("client_ip", [None])[0]
         if not client_ip:
             return "Unknown Location"
             
-        # Use ipapi.co to get location (free tier)
-        response = requests.get(f"https://ipapi.co/{client_ip}/json/")
+        # Use ipinfo.io with API key from secrets
+        headers = {
+            "Authorization": f"Bearer {st.secrets['ipinfo']['token']}"
+        }
+        response = requests.get(f"https://ipinfo.io/{client_ip}/json", headers=headers)
         if response.status_code == 200:
             data = response.json()
             city = data.get('city', '')
-            country = data.get('country_name', '')
+            country = data.get('country', '')
             return f"{city}, {country}" if city else "Unknown Location"
     except Exception as e:
         st.error(f"Error getting location: {str(e)}")
