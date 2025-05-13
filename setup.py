@@ -18,6 +18,10 @@ setup(
         "streamlit-option-menu",
         "streamlit-chat",
         "streamlit-ace",
-        "streamlit-autorefresh"
+        "streamlit-autorefresh",
+        "llama-index",
+        "llama-index-llms-openai",
+        "llama-index-readers-file",
+        "pypdf"
     ],
 ) 
