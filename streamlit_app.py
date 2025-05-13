@@ -12,11 +12,8 @@ import json
 import pathlib
 import streamlit.components.v1 as components
 import subprocess
-from llama_index.core import SimpleDirectoryReader
-from llama_index.indices.vector_store import VectorStoreIndex
-from llama_index.service_context import ServiceContext
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 from llama_index.llms.openai import OpenAI
-from llama_index.embeddings.openai import OpenAIEmbedding
 
 # Add the project root directory to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -210,15 +207,13 @@ with st.sidebar:
 @st.cache_resource(show_spinner=True)
 def build_rag_index(folder):
     docs = SimpleDirectoryReader(input_dir=folder, recursive=True).load_data()
-    service_context = ServiceContext.from_defaults(
-        llm=OpenAI(api_key=st.secrets["openai"]["api_key"]),
-        embed_model=OpenAIEmbedding(api_key=st.secrets["openai"]["api_key"])
-    )
-    index = VectorStoreIndex.from_documents(docs, service_context=service_context)
+    index = VectorStoreIndex.from_documents(docs)
     return index
 
-cyber_index = build_rag_index("rag_docs/cyber")
-grc_index = build_rag_index("rag_docs/grc")
+cyber_docs = SimpleDirectoryReader("rag_docs/cyber").load_data()
+grc_docs = SimpleDirectoryReader("rag_docs/grc").load_data()
+cyber_index = VectorStoreIndex.from_documents(cyber_docs)
+grc_index = VectorStoreIndex.from_documents(grc_docs)
 cyber_query_engine = cyber_index.as_query_engine()
 grc_query_engine = grc_index.as_query_engine()
 
