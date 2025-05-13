@@ -226,33 +226,55 @@ with st.sidebar:
         st.info("No searches yet. Be the first to search!")
 
 st.subheader("Ask the Cyber or GRC Knowledge Base")
-kb_choice = st.radio("Choose a knowledge base:", ["Cyber", "GRC"])
-user_query = st.text_input("Enter your Cyber or GRC question:")
+
+# Agent selection with auto-select option
+agent_mode = st.radio(
+    "Choose how to handle your query:",
+    ["Auto-select Agent", "Use Specific Agent"],
+    horizontal=True
+)
+
+if agent_mode == "Use Specific Agent":
+    kb_choice = st.radio("Choose a knowledge base:", ["Cyber", "GRC"])
+else:
+    kb_choice = None
+
+user_query = st.text_input("Enter your question:")
 
 if user_query:
-    if RAG_AVAILABLE:
-        with st.spinner("Retrieving answer from curated docs..."):
-            try:
-                if kb_choice == "Cyber":
-                    response = cyber_query_engine.query(user_query)
-                    agent_used = "Cyber RAG"
-                else:
-                    response = grc_query_engine.query(user_query)
-                    agent_used = "GRC RAG"
-                st.write(response.response)
-            except Exception as e:
-                st.warning("RAG search failed. Falling back to agent-based search...")
-                result = route_query(user_query)
-                agent_used = result['agent']
-                st.success(f"Response from {agent_used.upper()} Agent")
-                st.markdown(result["response"])
-    else:
-        # Use agent-based search as fallback
+    if agent_mode == "Auto-select Agent":
+        # Let the agent router decide
         with st.spinner("Thinking..."):
             result = route_query(user_query)
             agent_used = result['agent']
             st.success(f"Response from {agent_used.upper()} Agent")
             st.markdown(result["response"])
+    else:
+        # Use specific agent based on selection
+        if RAG_AVAILABLE:
+            with st.spinner("Retrieving answer from curated docs..."):
+                try:
+                    if kb_choice == "Cyber":
+                        response = cyber_query_engine.query(user_query)
+                        agent_used = "Cyber RAG"
+                    else:
+                        response = grc_query_engine.query(user_query)
+                        agent_used = "GRC RAG"
+                    st.write(response.response)
+                except Exception as e:
+                    st.warning("RAG search failed. Falling back to agent-based search...")
+                    # Force the specific agent
+                    result = route_query(user_query, force_agent=kb_choice.lower())
+                    agent_used = result['agent']
+                    st.success(f"Response from {agent_used.upper()} Agent")
+                    st.markdown(result["response"])
+        else:
+            # Use agent-based search with forced agent
+            with st.spinner("Thinking..."):
+                result = route_query(user_query, force_agent=kb_choice.lower())
+                agent_used = result['agent']
+                st.success(f"Response from {agent_used.upper()} Agent")
+                st.markdown(result["response"])
 
     # Update community search history if it's a new query
     if user_query != st.session_state.last_query:
@@ -261,7 +283,7 @@ if user_query:
             'query': user_query,
             'location': get_client_location(),
             'agent': agent_used,
-            'kb_choice': kb_choice  # Store the knowledge base choice
+            'kb_choice': kb_choice if kb_choice else 'Auto-selected'
         }
         st.session_state.community_searches.insert(0, search_entry)
         
