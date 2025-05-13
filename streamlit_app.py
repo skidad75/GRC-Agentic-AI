@@ -113,4 +113,4 @@ if query:
             'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         })
         # Force a rerun to update the sidebar
-        st.experimental_rerun() 
+        st.rerun() 
