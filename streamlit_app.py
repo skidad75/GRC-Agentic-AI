@@ -134,17 +134,20 @@ st.markdown(
         margin: 1rem 0 !important;
     }
     .prompt-button {
-        background-color: white !important;
+        background-color: #E0ECFF !important;
+        color: #1E3A8A !important;
         border: 1px solid var(--border-color) !important;
         border-radius: 4px !important;
         padding: 0.5rem !important;
         margin: 0.25rem !important;
+        font-weight: 500 !important;
         transition: all 0.2s ease !important;
+        box-shadow: 0 1px 2px rgba(30,58,138,0.04);
     }
     .prompt-button:hover {
-        background-color: var(--accent-color) !important;
-        color: white !important;
-        border-color: var(--accent-color) !important;
+        background-color: #B6D4FF !important;
+        color: #1E3A8A !important;
+        border-color: #3B82F6 !important;
     }
     
     /* Footer */
@@ -160,7 +163,7 @@ st.markdown(
 
 # Use inline HTML for the main header
 st.markdown("""
-<h1 style='color:#1E3A8A;font-size:2.2rem;font-weight:800;font-family:Segoe UI,Arial,sans-serif;line-height:1.2;margin-bottom:1rem;border-bottom:2px solid #E5E7EB;padding-bottom:0.5rem;'>🧠 Cyber GRC Agentic AI Assistant</h1>
+<h1 style='color:#1E3A8A;font-size:2.2rem;font-weight:800;font-family:Segoe UI,Arial,sans-serif;line-height:1.2;margin-bottom:0.5rem;'>🧠 Cyber GRC Agentic AI Assistant</h1>
 """, unsafe_allow_html=True)
 
 # Auto-collapse the sidebar on page load (unofficial JS hack)
@@ -533,7 +536,7 @@ with col2:
     ]:
         st.markdown(f"**{label}**")
         for prompt in prompts:
-            if st.button(prompt, key=f"prompt_{label}_{prompt}", use_container_width=True):
+            if st.button(prompt, key=f"prompt_{label}_{prompt}", use_container_width=True, help=None, type="secondary", args=None, kwargs=None, class_="prompt-button"):
                 st.session_state['user_query'] = prompt
                 st.session_state['last_query'] = prompt
                 st.rerun()
