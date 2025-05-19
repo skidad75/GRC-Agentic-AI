@@ -278,15 +278,6 @@ if 'user_query' not in st.session_state:
 st.title("🧠 Cyber GRC Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
 
-# Add Buy Me a Coffee link
-st.markdown("""
-<div style='text-align: center; margin: 20px 0;'>
-    <a href="https://buymeacoffee.com/skidad75" target="_blank">
-        <img src="https://img.shields.io/badge/☕%20Buy%20Me%20a%20Coffee-skidad75-yellow?style=for-the-badge" alt="Buy Me a Coffee">
-    </a>
-</div>
-""", unsafe_allow_html=True)
-
 # Sidebar for community searches
 with st.sidebar:
     st.subheader("🔍 Community Search History")
@@ -419,4 +410,18 @@ for label, prompts in [
             st.session_state['last_query'] = prompt
             st.rerun()
 
-st.markdown("---") 
+st.markdown("---")
+
+# Add footer links at the bottom of the page
+st.markdown("""
+---
+<div style='text-align: center; margin: 20px 0;'>
+    <a href="https://buymeacoffee.com/skidad75" target="_blank">
+        <img src="https://img.shields.io/badge/☕%20Buy%20Me%20a%20Coffee-skidad75-yellow?style=for-the-badge" alt="Buy Me a Coffee">
+    </a>
+    <br/>
+    <a href="https://github.com/skidad75/grc-agentic-ai" target="_blank">
+        <img src="https://img.shields.io/badge/GitHub-Source%20Code-blue?style=for-the-badge&logo=github" alt="GitHub">
+    </a>
+</div>
+""", unsafe_allow_html=True) 
