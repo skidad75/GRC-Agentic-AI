@@ -490,7 +490,6 @@ with col1:
             # Save to file
             save_community_searches(st.session_state['community_searches'])
             st.session_state['last_query'] = user_query
-            st.session_state['user_query_input'] = ""
             st.rerun()
 
 with col2:
