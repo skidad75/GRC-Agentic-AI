@@ -307,6 +307,15 @@ if 'user_agent' not in st.session_state or not st.session_state['user_agent']:
 st.title("🧠 Cyber GRC Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
 
+# Add a link to the Community Search History page
+st.markdown("""
+<div style='text-align: right; margin-bottom: 0.2rem;'>
+    <a href="/community_search_history" target="_self" style="font-size: 1rem; text-decoration: none;">
+        📜 View Community Search History
+    </a>
+</div>
+""", unsafe_allow_html=True)
+
 # Sidebar for community searches
 # The community search history is now only available on its own page.
 
@@ -385,7 +394,18 @@ if query_to_use:
 
 # Add Sample Prompts Section BELOW the main query input and logic
 st.markdown("---")
-st.subheader("🖱️ Click a Sample Prompt")
+# Use a finger pushing a button emoji for the header
+st.subheader("👉🔘 Click a Sample Prompt")
+
+# Add CSS to further reduce whitespace above the sample prompt header
+st.markdown(
+    '''<style>
+    h2, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4 {
+        margin-top: 0.1rem !important;
+    }
+    </style>''',
+    unsafe_allow_html=True
+)
 
 # Define prompts for each discipline
 cyber_prompts = [
