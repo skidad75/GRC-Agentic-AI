@@ -1,6 +1,11 @@
 import os
 import sys
 import streamlit as st
+import requests
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from datetime import datetime
 
 # Set up the Streamlit page - MUST be the first Streamlit command
 #st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
@@ -273,19 +278,6 @@ def check_app_health():
             "🚨 App Health Check Failed",
             f"The app is not accessible. Error: {str(e)}\nTime: {datetime.now()}"
         )
-
-def run_health_check():
-    """
-    Continuously run the app health check in a background thread at the interval specified in Streamlit secrets.
-    """
-    while True:
-        check_app_health()
-        time.sleep(st.secrets.get("monitoring", {}).get("check_interval", 30))
-
-# Start health check in background thread if monitoring is enabled
-if st.secrets.get("monitoring", {}).get("enabled", False):
-    health_check_thread = threading.Thread(target=run_health_check, daemon=True)
-    health_check_thread.start()
 
 # Initialize session state for community searches if it doesn't exist
 if 'community_searches' not in st.session_state:
