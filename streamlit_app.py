@@ -536,7 +536,7 @@ with col2:
     ]:
         st.markdown(f"**{label}**")
         for prompt in prompts:
-            if st.button(prompt, key=f"prompt_{label}_{prompt}", use_container_width=True, help=None, type="secondary", args=None, kwargs=None, class_="prompt-button"):
+            if st.button(prompt, key=f"prompt_{label}_{prompt}", use_container_width=True):
                 st.session_state['user_query'] = prompt
                 st.session_state['last_query'] = prompt
                 st.rerun()
