@@ -313,10 +313,18 @@ if agent_mode == "Use Specific Agent":
 else:
     kb_choice = None
 
-user_query = st.text_input("Enter your question:", key="user_query")
+user_query = st.text_input("Enter your question:", key="user_query_input")
 
-if st.session_state['user_query']:
-    user_query = st.session_state['user_query']
+# Determine which query to use
+query_to_use = None
+if st.session_state.get('user_query'):
+    query_to_use = st.session_state['user_query']
+    st.session_state['user_query'] = ""  # Clear after use
+elif st.session_state.get('user_query_input'):
+    query_to_use = st.session_state['user_query_input']
+
+if query_to_use:
+    user_query = query_to_use
     if agent_mode == "Auto-select Agent":
         # Let the agent router decide
         with st.spinner("Thinking..."):
@@ -356,7 +364,7 @@ if st.session_state['user_query']:
                 st.markdown(result["response"])
 
     # Update community search history if it's a new query
-    if user_query != st.session_state.last_query:
+    if user_query != st.session_state['last_query']:
         # Add new search to the beginning of the list
         search_entry = {
             'query': user_query,
@@ -364,14 +372,14 @@ if st.session_state['user_query']:
             'agent': agent_used,
             'kb_choice': kb_choice if kb_choice else 'Auto-selected'
         }
-        st.session_state.community_searches.insert(0, search_entry)
+        st.session_state['community_searches'].insert(0, search_entry)
         # Keep only the last MAX_SEARCHES entries
-        if len(st.session_state.community_searches) > MAX_SEARCHES:
-            st.session_state.community_searches = st.session_state.community_searches[:MAX_SEARCHES]
+        if len(st.session_state['community_searches']) > MAX_SEARCHES:
+            st.session_state['community_searches'] = st.session_state['community_searches'][:MAX_SEARCHES]
         # Save to file
-        save_community_searches(st.session_state.community_searches)
-        st.session_state.last_query = user_query
-        st.session_state['user_query'] = ""
+        save_community_searches(st.session_state['community_searches'])
+        st.session_state['last_query'] = user_query
+        st.session_state['user_query_input'] = ""
         st.rerun()
 
 # Add Sample Prompts Section BELOW the main query input and logic
