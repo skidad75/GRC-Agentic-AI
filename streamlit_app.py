@@ -68,6 +68,11 @@ else:
     st.sidebar.markdown("🤖 Using agent-based search")
 
 def get_public_ip():
+    """
+    Retrieve the public IP address of the client machine using an external API.
+    Returns:
+        str or None: The public IP address as a string, or None if retrieval fails.
+    """
     try:
         response = requests.get('https://api.ipify.org', timeout=5)
         return response.text
@@ -75,6 +80,12 @@ def get_public_ip():
         return None
 
 def get_last_hop_city_region_country():
+    """
+    Perform a traceroute to 8.8.8.8 and return the city, region, and country of the last hop IP address.
+    Uses the IPinfo API for geolocation. Returns a fallback string if any step fails.
+    Returns:
+        str: Location in the format 'City, Region, Country' or a fallback string if unavailable.
+    """
     try:
         # Run traceroute to a public IP (e.g., 8.8.8.8)
         result = subprocess.run(
@@ -122,6 +133,12 @@ def get_last_hop_city_region_country():
         return "Somewhere in the multiverse..."
 
 def get_client_location():
+    """
+    Retrieve the city, region, and country of the client based on their public IP address.
+    Uses the IPinfo API for geolocation. Returns a fallback string if any step fails.
+    Returns:
+        str: Location in the format 'City, Region, Country' or a fallback string if unavailable.
+    """
     try:
         client_ip = get_public_ip()
         if not client_ip:
@@ -146,7 +163,11 @@ def get_client_location():
         return "Somewhere in the multiverse..."
 
 def load_community_searches():
-    """Load community searches from file"""
+    """
+    Load the community search history from the JSON file defined by SEARCHES_FILE.
+    Returns:
+        list: A list of previous community searches, or an empty list if loading fails.
+    """
     try:
         if os.path.exists(SEARCHES_FILE):
             with open(SEARCHES_FILE, 'r') as f:
@@ -156,7 +177,11 @@ def load_community_searches():
     return []
 
 def save_community_searches(searches):
-    """Save community searches to file"""
+    """
+    Save the community search history to the JSON file defined by SEARCHES_FILE.
+    Args:
+        searches (list): The list of community searches to save.
+    """
     try:
         with open(SEARCHES_FILE, 'w') as f:
             json.dump(searches, f)
@@ -165,6 +190,12 @@ def save_community_searches(searches):
 
 # Health check function
 def send_alert_email(subject, message):
+    """
+    Send an alert email using Gmail SMTP with the given subject and message.
+    Args:
+        subject (str): The subject of the email.
+        message (str): The body of the email.
+    """
     sender_email = "skidad75@gmail.com"
     receiver_email = "skidad75@gmail.com"
     password = st.secrets["email"]["password"]
@@ -187,6 +218,10 @@ def send_alert_email(subject, message):
         st.error(f"Failed to send alert email: {str(e)}")
 
 def check_app_health():
+    """
+    Check if the Streamlit app is healthy by sending a request to its public URL.
+    If the app is not healthy, send an alert email.
+    """
     try:
         # Check if the app is responding
         response = requests.get("https://cybergrc-agent.streamlit.app/")
@@ -202,6 +237,9 @@ def check_app_health():
         )
 
 def run_health_check():
+    """
+    Continuously run the app health check in a background thread at the interval specified in Streamlit secrets.
+    """
     while True:
         check_app_health()
         time.sleep(st.secrets.get("monitoring", {}).get("check_interval", 30))
@@ -231,7 +269,6 @@ st.markdown("Click any prompt below to quickly get started:")
 # Create three columns for the prompts
 col1, col2, col3 = st.columns(3)
 
-# Define the prompts
 test_prompts = [
     "Evaluate whether this cloud-hosted patient portal is HIPAA-compliant.",
     "Perform a NIST CSF gap analysis for the uploaded system architecture.",
@@ -250,12 +287,12 @@ test_prompts = [
     "Does this solution architecture align with Providence's AI governance framework?"
 ]
 
-# Distribute prompts across columns
 prompts_per_column = len(test_prompts) // 3
 for i, prompt in enumerate(test_prompts):
     col = col1 if i < prompts_per_column else (col2 if i < 2 * prompts_per_column else col3)
     if col.button(prompt, key=f"prompt_{i}", use_container_width=True):
-        st.session_state.last_query = prompt
+        st.session_state['user_query'] = prompt
+        st.session_state['last_query'] = prompt
         st.rerun()
 
 st.markdown("---")
@@ -265,6 +302,8 @@ if 'community_searches' not in st.session_state:
     st.session_state.community_searches = load_community_searches()
 if 'last_query' not in st.session_state:
     st.session_state.last_query = ""
+if 'user_query' not in st.session_state:
+    st.session_state['user_query'] = ""
 
 # Sidebar for community searches
 with st.sidebar:
@@ -296,9 +335,10 @@ if agent_mode == "Use Specific Agent":
 else:
     kb_choice = None
 
-user_query = st.text_input("Enter your question:")
+user_query = st.text_input("Enter your question:", key="user_query")
 
-if user_query:
+if st.session_state['user_query']:
+    user_query = st.session_state['user_query']
     if agent_mode == "Auto-select Agent":
         # Let the agent router decide
         with st.spinner("Thinking..."):
@@ -347,13 +387,11 @@ if user_query:
             'kb_choice': kb_choice if kb_choice else 'Auto-selected'
         }
         st.session_state.community_searches.insert(0, search_entry)
-        
         # Keep only the last MAX_SEARCHES entries
         if len(st.session_state.community_searches) > MAX_SEARCHES:
             st.session_state.community_searches = st.session_state.community_searches[:MAX_SEARCHES]
-        
         # Save to file
         save_community_searches(st.session_state.community_searches)
         st.session_state.last_query = user_query
-        # Force a rerun to update the sidebar
+        st.session_state['user_query'] = ""
         st.rerun() 
