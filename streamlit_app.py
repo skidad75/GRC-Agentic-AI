@@ -5,6 +5,25 @@ import streamlit as st
 # Set up the Streamlit page - MUST be the first Streamlit command
 st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
 
+# Custom CSS for compact layout
+st.markdown(
+    '''<style>
+    /* Reduce padding and margins for main content */
+    .main .block-container { padding-top: 1.2rem; padding-bottom: 0.5rem; }
+    .stButton > button { margin-bottom: 0.2rem; padding: 0.3rem 0.5rem; font-size: 0.92rem; }
+    .stTextInput > div > div > input { padding: 0.3rem 0.5rem; font-size: 1rem; }
+    .stRadio > div { gap: 0.5rem; }
+    .stRadio label { font-size: 0.95rem; }
+    .stMarkdown h2, .stMarkdown h3, .stMarkdown h4 { margin-bottom: 0.3rem; margin-top: 0.3rem; font-size: 1.1rem; }
+    .stMarkdown p { margin-bottom: 0.2rem; margin-top: 0.2rem; }
+    .stSidebar .block-container { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .stSidebar .stMarkdown { margin-bottom: 0.2rem; }
+    .stSidebar h2, .stSidebar h3, .stSidebar h4 { margin-bottom: 0.2rem; margin-top: 0.2rem; font-size: 1rem; }
+    .stSidebar p { margin-bottom: 0.1rem; margin-top: 0.1rem; }
+    </style>''',
+    unsafe_allow_html=True
+)
+
 import requests
 import time
 from datetime import datetime
