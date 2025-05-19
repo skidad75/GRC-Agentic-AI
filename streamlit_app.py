@@ -320,32 +320,6 @@ def get_client_location():
         st.info(f"Error getting client location: {str(e)}")
         return "Somewhere in the multiverse..."
 
-def load_community_searches():
-    """
-    Load the community search history from the JSON file defined by SEARCHES_FILE.
-    Returns:
-        list: A list of previous community searches, or an empty list if loading fails.
-    """
-    try:
-        if os.path.exists(SEARCHES_FILE):
-            with open(SEARCHES_FILE, 'r') as f:
-                return json.load(f)
-    except Exception as e:
-        st.error(f"Error loading community searches: {str(e)}")
-    return []
-
-def save_community_searches(searches):
-    """
-    Save the community search history to the JSON file defined by SEARCHES_FILE.
-    Args:
-        searches (list): The list of community searches to save.
-    """
-    try:
-        with open(SEARCHES_FILE, 'w') as f:
-            json.dump(searches, f)
-    except Exception as e:
-        st.error(f"Error saving community searches: {str(e)}")
-
 # Health check function
 def send_alert_email(subject, message):
     """
@@ -393,28 +367,6 @@ def check_app_health():
             "🚨 App Health Check Failed",
             f"The app is not accessible. Error: {str(e)}\nTime: {datetime.now()}"
         )
-
-# Initialize session state for community searches if it doesn't exist
-if 'community_searches' not in st.session_state:
-    st.session_state['community_searches'] = load_community_searches()
-if 'last_query' not in st.session_state:
-    st.session_state['last_query'] = ""
-if 'user_query' not in st.session_state:
-    st.session_state['user_query'] = ""
-
-# Inject JS to capture user agent and store in Streamlit session state (no visible input)
-if 'user_agent' not in st.session_state or not st.session_state['user_agent']:
-    st.components.v1.html(
-        '''<script>
-        const userAgent = navigator.userAgent;
-        window.parent.postMessage({type: 'streamlit:setComponentValue', key: 'user_agent', value: userAgent}, '*');
-        </script>''',
-        height=0,
-        width=0
-    )
-    # Fallback: set to empty string if not set by JS
-    if 'user_agent' not in st.session_state:
-        st.session_state['user_agent'] = ''
 
 # Create a two-column layout for the main content
 col1, col2 = st.columns([2, 1])
@@ -469,28 +421,6 @@ with col1:
                 agent_used = result['agent']
                 st.success(f"Response from {agent_used.upper()} Agent")
                 st.markdown(result["response"])
-
-        # Update community search history if it's a new query
-        if user_query != st.session_state['last_query']:
-            # Add new search to the beginning of the list
-            search_entry = {
-                'query': user_query,
-                'timestamp': datetime.now().isoformat(),
-                'ip': get_public_ip(),
-                'location': get_client_location(),
-                'agent': agent_used,
-                'kb_choice': kb_choice if kb_choice else 'Auto-selected',
-                'cookies': st.experimental_get_query_params().get('cookies', ''),
-                'user_agent': st.session_state.get('user_agent', '')
-            }
-            st.session_state['community_searches'].insert(0, search_entry)
-            # Keep only the last MAX_SEARCHES entries
-            if len(st.session_state['community_searches']) > MAX_SEARCHES:
-                st.session_state['community_searches'] = st.session_state['community_searches'][:MAX_SEARCHES]
-            # Save to file
-            save_community_searches(st.session_state['community_searches'])
-            st.session_state['last_query'] = user_query
-            st.rerun()
 
 with col2:
     st.markdown("### Sample Prompts")
