@@ -291,6 +291,21 @@ if 'last_query' not in st.session_state:
 if 'user_query' not in st.session_state:
     st.session_state['user_query'] = ""
 
+# Inject JS to capture user agent and store in Streamlit session state
+user_agent = st.session_state.get('user_agent', None)
+if user_agent is None:
+    user_agent = st.text_input("", value="", key="user_agent_hidden", label_visibility="collapsed")
+    st.components.v1.html(
+        '''<script>
+        const userAgent = navigator.userAgent;
+        const input = window.parent.document.querySelector('input[data-testid="stTextInput"]');
+        if (input && !input.value) { input.value = userAgent; input.dispatchEvent(new Event('input', { bubbles: true })); }
+        </script>''',
+        height=0,
+        width=0
+    )
+    st.session_state['user_agent'] = st.session_state.get('user_agent_hidden', '')
+
 # Set up the Streamlit page
 st.title("🧠 Cyber GRC Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
@@ -363,9 +378,13 @@ if query_to_use:
         # Add new search to the beginning of the list
         search_entry = {
             'query': user_query,
+            'timestamp': datetime.now().isoformat(),
+            'ip': get_public_ip(),
             'location': get_client_location(),
             'agent': agent_used,
-            'kb_choice': kb_choice if kb_choice else 'Auto-selected'
+            'kb_choice': kb_choice if kb_choice else 'Auto-selected',
+            'cookies': st.experimental_get_query_params().get('cookies', ''),
+            'user_agent': st.session_state.get('user_agent', '')
         }
         st.session_state['community_searches'].insert(0, search_entry)
         # Keep only the last MAX_SEARCHES entries
