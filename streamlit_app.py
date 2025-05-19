@@ -45,7 +45,7 @@ st.markdown(
 st.markdown("""
 <h1 style='margin-top:0;padding-top:0;font-size:2.4rem;font-weight:800;font-family:Segoe UI,Arial,sans-serif;line-height:1.1;'>🧠 Cyber GRC Agentic AI Assistant</h1>
 """, unsafe_allow_html=True)
-st.markdown("Ask a question related to cybersecurity or GRC.")
+st.markdown("Ask a question for IS Cyber, GRC, Attack Surface, or Risk.")
 
 # Auto-collapse the sidebar on page load (unofficial JS hack)
 st.components.v1.html(
