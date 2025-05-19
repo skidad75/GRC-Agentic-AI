@@ -5,29 +5,19 @@ import streamlit as st
 # Set up the Streamlit page - MUST be the first Streamlit command
 st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
 
-# Auto-collapse the sidebar on page load (unofficial JS hack)
-st.components.v1.html(
-    '''<script>
-    window.addEventListener('DOMContentLoaded', function() {
-        const sidebar = window.parent.document.querySelector('section[data-testid="stSidebar"]');
-        const collapseButton = window.parent.document.querySelector('button[title="Collapse sidebar"]');
-        if (sidebar && collapseButton && !sidebar.classList.contains('collapsed')) {
-            collapseButton.click();
-        }
-    });
-    </script>''',
-    height=0,
-    width=0
-)
-
-# Custom CSS for compact layout and consistent fonts
+# Stronger CSS for top whitespace and header styling
 st.markdown(
     '''<style>
-    /* Remove whitespace above the main page header and shift content up */
     .main .block-container { padding-top: 0 !important; margin-top: 0 !important; }
-    .main .block-container > *:first-child { margin-top: 0 !important; }
-    h1, .stMarkdown h1 { margin-top: 0 !important; font-size: 2.4rem !important; font-weight: 800 !important; font-family: 'Segoe UI', 'Arial', sans-serif !important; }
-    /* Increase main header by 20% (default is 2rem, now 2.4rem) */
+    .main .block-container > *:first-child { margin-top: 0 !important; padding-top: 0 !important; }
+    .main .block-container h1, .main .block-container h1:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        font-size: 2.4rem !important;
+        font-weight: 800 !important;
+        font-family: 'Segoe UI', 'Arial', sans-serif !important;
+        line-height: 1.1 !important;
+    }
     .stMarkdown h2, h2, .stMarkdown h3, h3, .stMarkdown h4, h4 {
         font-family: 'Segoe UI', 'Arial', sans-serif !important;
         font-size: 1.25rem !important;
@@ -49,6 +39,27 @@ st.markdown(
     hr { margin: 0.3rem 0 !important; }
     </style>''',
     unsafe_allow_html=True
+)
+
+# Use inline HTML for the main header for guaranteed size and style
+st.markdown("""
+<h1 style='margin-top:0;padding-top:0;font-size:2.4rem;font-weight:800;font-family:Segoe UI,Arial,sans-serif;line-height:1.1;'>🧠 Cyber GRC Agentic AI Assistant</h1>
+""", unsafe_allow_html=True)
+st.markdown("Ask a question related to cybersecurity or GRC.")
+
+# Auto-collapse the sidebar on page load (unofficial JS hack)
+st.components.v1.html(
+    '''<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        const sidebar = window.parent.document.querySelector('section[data-testid="stSidebar"]');
+        const collapseButton = window.parent.document.querySelector('button[title="Collapse sidebar"]');
+        if (sidebar && collapseButton && !sidebar.classList.contains('collapsed')) {
+            collapseButton.click();
+        }
+    });
+    </script>''',
+    height=0,
+    width=0
 )
 
 import requests
