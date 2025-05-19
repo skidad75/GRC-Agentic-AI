@@ -289,20 +289,19 @@ if 'last_query' not in st.session_state:
 if 'user_query' not in st.session_state:
     st.session_state['user_query'] = ""
 
-# Inject JS to capture user agent and store in Streamlit session state
-user_agent = st.session_state.get('user_agent', None)
-if user_agent is None:
-    user_agent = st.text_input("", value="", key="user_agent_hidden", label_visibility="collapsed")
+# Inject JS to capture user agent and store in Streamlit session state (no visible input)
+if 'user_agent' not in st.session_state or not st.session_state['user_agent']:
     st.components.v1.html(
         '''<script>
         const userAgent = navigator.userAgent;
-        const input = window.parent.document.querySelector('input[data-testid="stTextInput"]');
-        if (input && !input.value) { input.value = userAgent; input.dispatchEvent(new Event('input', { bubbles: true })); }
+        window.parent.postMessage({type: 'streamlit:setComponentValue', key: 'user_agent', value: userAgent}, '*');
         </script>''',
         height=0,
         width=0
     )
-    st.session_state['user_agent'] = st.session_state.get('user_agent_hidden', '')
+    # Fallback: set to empty string if not set by JS
+    if 'user_agent' not in st.session_state:
+        st.session_state['user_agent'] = ''
 
 # Set up the Streamlit page
 st.title("🧠 Cyber GRC Agentic AI Assistant")
