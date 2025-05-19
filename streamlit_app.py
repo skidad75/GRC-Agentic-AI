@@ -279,8 +279,7 @@ st.title("🧠 Cyber GRC Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
 
 # Sidebar for community searches
-with st.sidebar:
-    st.subheader("🔍 Community Search History")
+with st.sidebar.expander("🔍 Community Search History", expanded=False):
     if st.session_state['community_searches']:
         for search in st.session_state['community_searches'][:10]:  # Show first 10 searches (most recent)
             st.markdown(f"*{search['query']}*")
