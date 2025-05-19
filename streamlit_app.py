@@ -5,6 +5,21 @@ import streamlit as st
 # Set up the Streamlit page - MUST be the first Streamlit command
 st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
 
+# Auto-collapse the sidebar on page load (unofficial JS hack)
+st.components.v1.html(
+    '''<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        const sidebar = window.parent.document.querySelector('section[data-testid="stSidebar"]');
+        const collapseButton = window.parent.document.querySelector('button[title="Collapse sidebar"]');
+        if (sidebar && collapseButton && !sidebar.classList.contains('collapsed')) {
+            collapseButton.click();
+        }
+    });
+    </script>''',
+    height=0,
+    width=0
+)
+
 # Custom CSS for compact layout
 st.markdown(
     '''<style>
