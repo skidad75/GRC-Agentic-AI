@@ -333,14 +333,17 @@ if agent_mode == "Use Specific Agent":
 else:
     kb_choice = None
 
-user_query = st.text_input("Enter your question:", key="user_query_input")
+# Replace the text input and query logic with a form
+with st.form("query_form", clear_on_submit=False):
+    user_query = st.text_input("Enter your question:", key="user_query_input")
+    submitted = st.form_submit_button("Submit")
 
 # Determine which query to use
 query_to_use = None
 if st.session_state.get('user_query'):
     query_to_use = st.session_state['user_query']
     st.session_state['user_query'] = ""  # Clear after use
-elif st.session_state.get('user_query_input'):
+elif submitted and st.session_state.get('user_query_input'):
     query_to_use = st.session_state['user_query_input']
 
 if query_to_use:
