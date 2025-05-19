@@ -23,9 +23,10 @@ st.components.v1.html(
 # Custom CSS for compact layout
 st.markdown(
     '''<style>
-    /* Remove whitespace above the main page header */
+    /* Remove whitespace above the main page header and shift content up */
     .main .block-container { padding-top: 0 !important; margin-top: 0 !important; }
-    .main .block-container h1:first-child { margin-top: 0 !important; }
+    .main .block-container > *:first-child { margin-top: 0 !important; }
+    h1, .stMarkdown h1 { margin-top: 0 !important; }
     /* Compact main content and sidebar */
     .stButton > button { margin-bottom: 0.1rem !important; padding: 0.2rem 0.4rem !important; font-size: 0.9rem !important; min-height: 1.7em !important; }
     .stTextInput > div > div > input { padding: 0.2rem 0.4rem !important; font-size: 0.98rem !important; }
