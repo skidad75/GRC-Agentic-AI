@@ -2,7 +2,7 @@ name: Monitor App Health
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Run every 30 minutes
+    - cron: '0 */12 * * *'  # Run every 12 hours
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
@@ -10,9 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check app health
+        env:
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}" https://cybergrc-agent.streamlit.app/)
           if [ "$response" != "200" ]; then
             echo "App is not responding correctly. Status code: $response"
+            # Send email notification
+            curl -X POST https://cybergrc-agent.streamlit.app/send_alert \
+              -H "Content-Type: application/json" \
+              -d '{"subject": "🚨 App Health Check Failed", "message": "The app is not responding correctly. Status code: '"$response"'\nTime: '"$(date)"'"}'
             exit 1
           fi 
