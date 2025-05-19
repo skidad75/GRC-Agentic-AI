@@ -325,8 +325,6 @@ if 'user_agent' not in st.session_state or not st.session_state['user_agent']:
 # Set up the Streamlit page
 # (Remove or comment out the st.title("🧠 Cyber GRC Agentic AI Assistant") at line 325)
 
-st.subheader("Ask the Cyber or GRC Knowledge Base")
-
 # Agent selection with auto-select option
 agent_mode = st.radio(
     "Choose how to handle your query:",
