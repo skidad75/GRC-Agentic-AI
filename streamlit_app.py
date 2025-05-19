@@ -10,83 +10,157 @@ from datetime import datetime
 # Set up the Streamlit page - MUST be the first Streamlit command
 #st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
 
-# Stronger CSS for top whitespace and header styling
+# Modern professional styling
 st.markdown(
     '''<style>
-    /* Basic container adjustments */
+    /* Modern color scheme and base styles */
+    :root {
+        --primary-color: #1E3A8A;
+        --secondary-color: #2563EB;
+        --accent-color: #3B82F6;
+        --text-color: #1F2937;
+        --light-bg: #F3F4F6;
+        --border-color: #E5E7EB;
+    }
+    
+    /* Main container */
     .main .block-container { 
-        padding-top: 1rem !important; 
-        margin-top: 0 !important;
+        padding: 1rem 2rem !important;
+        max-width: 1400px !important;
     }
     
     /* Header styling */
     .main .block-container h1, .main .block-container h1:first-child {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
+        color: var(--primary-color) !important;
         font-size: 2.2rem !important;
         font-weight: 800 !important;
         font-family: 'Segoe UI', 'Arial', sans-serif !important;
         line-height: 1.2 !important;
+        margin-bottom: 1rem !important;
+        border-bottom: 2px solid var(--border-color) !important;
+        padding-bottom: 0.5rem !important;
     }
     
     /* Subheaders */
     .stMarkdown h2, h2, .stMarkdown h3, h3, .stMarkdown h4, h4 {
+        color: var(--primary-color) !important;
         font-family: 'Segoe UI', 'Arial', sans-serif !important;
         font-size: 1.2rem !important;
         font-weight: 600 !important;
-        margin-top: 1rem !important;
-        margin-bottom: 0.5rem !important;
+        margin: 1rem 0 0.5rem 0 !important;
     }
     
     /* Form elements */
     .stRadio label, .stTextInput label, .stButton > button, .stMarkdown p, p {
         font-family: 'Segoe UI', 'Arial', sans-serif !important;
         font-size: 1rem !important;
+        color: var(--text-color) !important;
     }
     
-    /* Buttons */
+    /* Modern buttons */
     .stButton > button { 
-        margin: 0.2rem 0 !important;
-        padding: 0.3rem 0.6rem !important;
+        background-color: var(--secondary-color) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 4px !important;
+        padding: 0.5rem 1rem !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+    .stButton > button:hover {
+        background-color: var(--primary-color) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
     }
     
-    /* Text inputs */
+    /* Modern text inputs */
     .stTextInput > div > div > input { 
-        padding: 0.3rem 0.6rem !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 4px !important;
+        padding: 0.5rem !important;
+        font-size: 1rem !important;
+    }
+    .stTextInput > div > div > input:focus {
+        border-color: var(--accent-color) !important;
+        box-shadow: 0 0 0 2px rgba(59,130,246,0.1) !important;
     }
     
     /* Radio buttons */
-    .stRadio > div { 
-        gap: 0.5rem !important;
+    .stRadio > div {
+        background-color: var(--light-bg) !important;
+        border-radius: 4px !important;
+        padding: 0.5rem !important;
+        margin: 0.5rem 0 !important;
     }
     
     /* Sidebar */
+    .stSidebar {
+        background-color: var(--light-bg) !important;
+    }
     .stSidebar .block-container { 
-        padding-top: 1rem !important;
+        padding: 1rem !important;
+    }
+    .stSidebar .stMarkdown {
+        color: var(--text-color) !important;
     }
     
     /* Dividers */
     hr { 
+        border: none !important;
+        border-top: 1px solid var(--border-color) !important;
         margin: 1rem 0 !important;
     }
     
-    /* Form spacing */
+    /* Form containers */
     .stForm {
-        padding: 1rem !important;
+        background-color: white !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 8px !important;
+        padding: 1.5rem !important;
+        margin: 1rem 0 !important;
     }
     
     /* Success/error messages */
     .stSuccess, .stError, .stWarning, .stInfo {
-        padding: 0.5rem !important;
+        border-radius: 4px !important;
+        padding: 0.75rem !important;
         margin: 0.5rem 0 !important;
+    }
+    
+    /* Sample prompts section */
+    .prompt-section {
+        background-color: var(--light-bg) !important;
+        border-radius: 8px !important;
+        padding: 1rem !important;
+        margin: 1rem 0 !important;
+    }
+    .prompt-button {
+        background-color: white !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 4px !important;
+        padding: 0.5rem !important;
+        margin: 0.25rem !important;
+        transition: all 0.2s ease !important;
+    }
+    .prompt-button:hover {
+        background-color: var(--accent-color) !important;
+        color: white !important;
+        border-color: var(--accent-color) !important;
+    }
+    
+    /* Footer */
+    footer {
+        text-align: center !important;
+        padding: 1rem !important;
+        color: var(--text-color) !important;
+        border-top: 1px solid var(--border-color) !important;
     }
     </style>''',
     unsafe_allow_html=True
 )
 
-# Use inline HTML for the main header for guaranteed size and style
+# Use inline HTML for the main header
 st.markdown("""
-<h1 style='margin-top:0;padding-top:0;font-size:2.2rem;font-weight:800;font-family:Segoe UI,Arial,sans-serif;line-height:1.2;'>🧠 Cyber GRC Agentic AI Assistant</h1>
+<h1 style='color:#1E3A8A;font-size:2.2rem;font-weight:800;font-family:Segoe UI,Arial,sans-serif;line-height:1.2;margin-bottom:1rem;border-bottom:2px solid #E5E7EB;padding-bottom:0.5rem;'>🧠 Cyber GRC Agentic AI Assistant</h1>
 """, unsafe_allow_html=True)
 
 # Auto-collapse the sidebar on page load (unofficial JS hack)
@@ -339,148 +413,134 @@ if 'user_agent' not in st.session_state or not st.session_state['user_agent']:
     if 'user_agent' not in st.session_state:
         st.session_state['user_agent'] = ''
 
-# Set up the Streamlit page
-# (Remove or comment out the st.title("🧠 Cyber GRC Agentic AI Assistant") at line 325)
+# Create a two-column layout for the main content
+col1, col2 = st.columns([2, 1])
 
-# Agent selection with auto-select option
-agent_mode = st.radio(
-    "Choose how to handle your query:",
-    ["Auto-select Agent", "Use Specific Agent"],
-    horizontal=True
-)
+with col1:
+    # Agent selection with auto-select option
+    st.markdown("### Query Configuration")
+    agent_mode = st.radio(
+        "Choose how to handle your query:",
+        ["Auto-select Agent", "Use Specific Agent"],
+        horizontal=True
+    )
 
-if agent_mode == "Use Specific Agent":
-    kb_choice = st.radio("Choose a knowledge base:", ["Cyber", "GRC", "Attack Surface", "Risk Management"])
-else:
-    kb_choice = None
-
-# Replace the text input and query logic with a form
-with st.form("query_form", clear_on_submit=False):
-    user_query = st.text_input("Enter your question:", key="user_query_input")
-    submitted = st.form_submit_button("Submit")
-
-# Determine which query to use
-query_to_use = None
-if st.session_state.get('user_query'):
-    query_to_use = st.session_state['user_query']
-    st.session_state['user_query'] = ""  # Clear after use
-elif submitted and st.session_state.get('user_query_input'):
-    query_to_use = st.session_state['user_query_input']
-
-if query_to_use:
-    user_query = query_to_use
-    if agent_mode == "Auto-select Agent":
-        # Let the agent router decide
-        with st.spinner("Thinking..."):
-            result = route_query(user_query)
-            agent_used = result['agent']
-            st.success(f"Response from {agent_used.upper()} Agent")
-            st.markdown(result["response"])
+    if agent_mode == "Use Specific Agent":
+        kb_choice = st.radio("Choose a knowledge base:", ["Cyber", "GRC", "Attack Surface", "Risk Management"])
     else:
-        # Use specific agent based on selection
-        force_agent = None
-        if kb_choice == "Cyber":
-            force_agent = "cyber"
-        elif kb_choice == "GRC":
-            force_agent = "grc"
-        elif kb_choice == "Attack Surface":
-            force_agent = "attack_surface"
-        elif kb_choice == "Risk Management":
-            force_agent = "risk_management"
-        with st.spinner("Thinking..."):
-            result = route_query(user_query, force_agent=force_agent)
-            agent_used = result['agent']
-            st.success(f"Response from {agent_used.upper()} Agent")
-            st.markdown(result["response"])
+        kb_choice = None
 
-    # Update community search history if it's a new query
-    if user_query != st.session_state['last_query']:
-        # Add new search to the beginning of the list
-        search_entry = {
-            'query': user_query,
-            'timestamp': datetime.now().isoformat(),
-            'ip': get_public_ip(),
-            'location': get_client_location(),
-            'agent': agent_used,
-            'kb_choice': kb_choice if kb_choice else 'Auto-selected',
-            'cookies': st.experimental_get_query_params().get('cookies', ''),
-            'user_agent': st.session_state.get('user_agent', '')
-        }
-        st.session_state['community_searches'].insert(0, search_entry)
-        # Keep only the last MAX_SEARCHES entries
-        if len(st.session_state['community_searches']) > MAX_SEARCHES:
-            st.session_state['community_searches'] = st.session_state['community_searches'][:MAX_SEARCHES]
-        # Save to file
-        save_community_searches(st.session_state['community_searches'])
-        st.session_state['last_query'] = user_query
-        st.session_state['user_query_input'] = ""
-        st.rerun()
+    # Query input form
+    with st.form("query_form", clear_on_submit=False):
+        user_query = st.text_input("Enter your question:", key="user_query_input")
+        submitted = st.form_submit_button("Submit")
 
-# Add Sample Prompts Section BELOW the main query input and logic
-st.markdown("---")
-# Use a finger pushing a button emoji for the header
-st.subheader("👉🔘 Click a Sample Prompt")
+    # Determine which query to use
+    query_to_use = None
+    if st.session_state.get('user_query'):
+        query_to_use = st.session_state['user_query']
+        st.session_state['user_query'] = ""  # Clear after use
+    elif submitted and st.session_state.get('user_query_input'):
+        query_to_use = st.session_state['user_query_input']
 
-# Add CSS to further reduce whitespace above the sample prompt header
-st.markdown(
-    '''<style>
-    h2, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4 {
-        margin-top: 0.1rem !important;
-    }
-    </style>''',
-    unsafe_allow_html=True
-)
+    if query_to_use:
+        user_query = query_to_use
+        if agent_mode == "Auto-select Agent":
+            with st.spinner("Thinking..."):
+                result = route_query(user_query)
+                agent_used = result['agent']
+                st.success(f"Response from {agent_used.upper()} Agent")
+                st.markdown(result["response"])
+        else:
+            force_agent = None
+            if kb_choice == "Cyber":
+                force_agent = "cyber"
+            elif kb_choice == "GRC":
+                force_agent = "grc"
+            elif kb_choice == "Attack Surface":
+                force_agent = "attack_surface"
+            elif kb_choice == "Risk Management":
+                force_agent = "risk_management"
+            with st.spinner("Thinking..."):
+                result = route_query(user_query, force_agent=force_agent)
+                agent_used = result['agent']
+                st.success(f"Response from {agent_used.upper()} Agent")
+                st.markdown(result["response"])
 
-# Define prompts for each discipline
-cyber_prompts = [
-    "What is a SIEM and how does it work?",
-    "List common types of cyber attacks on healthcare systems.",
-    "How do you secure a cloud-based application?",
-    "Explain the principle of least privilege in cybersecurity.",
-    "What are the steps in incident response for a ransomware attack?",
-]
-grc_prompts = [
-    "What is the purpose of a risk register in GRC?",
-    "How do you perform a NIST CSF gap analysis?",
-    "What are the main components of HIPAA compliance?",
-    "Describe the process of a GRC audit.",
-    "How do you map controls to ISO 27001 Annex A?",
-]
-attack_surface_prompts = [
-    "How do you discover external assets for attack surface management?",
-    "What tools are used for attack surface monitoring?",
-    "Explain the importance of reducing digital footprint.",
-    "How do you identify shadow IT in an organization?",
-    "What is continuous attack surface management?",
-]
-risk_management_prompts = [
-    "How do you perform a qualitative risk assessment?",
-    "What is risk appetite and how is it defined?",
-    "Describe the process of risk mitigation planning.",
-    "How do you use a risk matrix in decision making?",
-    "What are the key steps in a risk management lifecycle?",
-]
-
-# Display prompts in a compact grid with headers
-for label, prompts in [
-    ("Cyber", cyber_prompts),
-    ("GRC", grc_prompts),
-    ("Attack Surface", attack_surface_prompts),
-    ("Risk Management", risk_management_prompts),
-]:
-    st.markdown(f"**{label}**")
-    cols = st.columns(5)
-    for i, prompt in enumerate(prompts):
-        if cols[i].button(prompt, key=f"prompt_{label}_{i}", use_container_width=True):
-            st.session_state['user_query'] = prompt
-            st.session_state['last_query'] = prompt
+        # Update community search history if it's a new query
+        if user_query != st.session_state['last_query']:
+            # Add new search to the beginning of the list
+            search_entry = {
+                'query': user_query,
+                'timestamp': datetime.now().isoformat(),
+                'ip': get_public_ip(),
+                'location': get_client_location(),
+                'agent': agent_used,
+                'kb_choice': kb_choice if kb_choice else 'Auto-selected',
+                'cookies': st.experimental_get_query_params().get('cookies', ''),
+                'user_agent': st.session_state.get('user_agent', '')
+            }
+            st.session_state['community_searches'].insert(0, search_entry)
+            # Keep only the last MAX_SEARCHES entries
+            if len(st.session_state['community_searches']) > MAX_SEARCHES:
+                st.session_state['community_searches'] = st.session_state['community_searches'][:MAX_SEARCHES]
+            # Save to file
+            save_community_searches(st.session_state['community_searches'])
+            st.session_state['last_query'] = user_query
+            st.session_state['user_query_input'] = ""
             st.rerun()
 
-st.markdown("---")
+with col2:
+    st.markdown("### Sample Prompts")
+    st.markdown("Click a prompt to get started:")
+    
+    # Define prompts for each discipline
+    cyber_prompts = [
+        "What is a SIEM and how does it work?",
+        "List common types of cyber attacks on healthcare systems.",
+        "How do you secure a cloud-based application?",
+        "Explain the principle of least privilege in cybersecurity.",
+        "What are the steps in incident response for a ransomware attack?",
+    ]
+    grc_prompts = [
+        "What is the purpose of a risk register in GRC?",
+        "How do you perform a NIST CSF gap analysis?",
+        "What are the main components of HIPAA compliance?",
+        "Describe the process of a GRC audit.",
+        "How do you map controls to ISO 27001 Annex A?",
+    ]
+    attack_surface_prompts = [
+        "How do you discover external assets for attack surface management?",
+        "What tools are used for attack surface monitoring?",
+        "Explain the importance of reducing digital footprint.",
+        "How do you identify shadow IT in an organization?",
+        "What is continuous attack surface management?",
+    ]
+    risk_management_prompts = [
+        "How do you perform a qualitative risk assessment?",
+        "What is risk appetite and how is it defined?",
+        "Describe the process of risk mitigation planning.",
+        "How do you use a risk matrix in decision making?",
+        "What are the key steps in a risk management lifecycle?",
+    ]
 
-# Add footer links at the bottom of the page
+    # Display prompts in a compact grid
+    for label, prompts in [
+        ("Cyber", cyber_prompts),
+        ("GRC", grc_prompts),
+        ("Attack Surface", attack_surface_prompts),
+        ("Risk Management", risk_management_prompts),
+    ]:
+        st.markdown(f"**{label}**")
+        for prompt in prompts:
+            if st.button(prompt, key=f"prompt_{label}_{prompt}", use_container_width=True):
+                st.session_state['user_query'] = prompt
+                st.session_state['last_query'] = prompt
+                st.rerun()
+
+# Add footer
+st.markdown("---")
 st.markdown("""
----
 <div style='text-align: center; margin: 20px 0;'>
     <a href="https://buymeacoffee.com/skidad75" target="_blank">
         <img src="https://img.shields.io/badge/☕%20Buy%20Me%20a%20Coffee-skidad75-yellow?style=for-the-badge" alt="Buy Me a Coffee">
