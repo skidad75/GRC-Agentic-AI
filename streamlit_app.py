@@ -311,12 +311,10 @@ with st.sidebar:
     if st.session_state.community_searches:
         for search in st.session_state.community_searches[:10]:  # Show first 10 searches (most recent)
             st.markdown(f"*{search['query']}*")
-            # Get agent info with better fallback handling
             agent_info = search.get('agent', 'Unknown')
             if agent_info == 'Unknown' and 'kb_choice' in search:
                 agent_info = f"{search['kb_choice']} RAG"
             st.markdown(f"🤖 Agent: {agent_info}")
-            st.markdown(f"📍 {search['location']}")
             st.markdown("---")
     else:
         st.info("No searches yet. Be the first to search!")
