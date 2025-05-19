@@ -15,6 +15,25 @@ This is a working prototype of a **multi-agent LLM system** designed to support 
 
 ---
 
+## 🆕 New Features (2024)
+
+- **Four Specialized Agents:**
+  - 🤖 **Cyber Agent**: Cybersecurity, threat intel, incident response, and technical controls.
+  - 🛡️ **GRC Agent**: Governance, risk, compliance, frameworks (NIST, ISO, HIPAA, etc).
+  - 🌐 **Attack Surface Agent**: Asset discovery, external exposure, digital footprint, shadow IT.
+  - 📉 **Risk Management Agent**: Risk assessment, mitigation, risk registers, frameworks.
+- **Agent Selection UI:**
+  - Users can now select from all four agents in the "Choose a knowledge base" section.
+  - Auto-select mode uses smart keyword routing to pick the best agent for your query.
+- **Sample Prompt Launcher:**
+  - 20 curated prompts (5 per agent discipline) are available as clickable buttons.
+  - Prompts are grouped and labeled by discipline for quick testing and onboarding.
+- **Cleaner, Denser UI:**
+  - Compact layout for more information on screen.
+  - Footer with Buy Me a Coffee and GitHub links.
+
+---
+
 ## 🧠 Design Overview
 
 **Purpose**:  
@@ -23,6 +42,8 @@ To provide a Streamlit-based front-end for querying Cybersecurity and GRC-focuse
 ### 🏗️ Architecture Components
 - 🤖 **Cyber Agent**: Ingests threat intel, attack patterns, and internal architecture to offer risk insights.
 - 🛡️ **GRC Agent**: Specializes in frameworks like NIST, ISO, and internal policies.
+- 🌐 **Attack Surface Agent**: Focuses on external asset discovery, attack surface reduction, and shadow IT.
+- 📉 **Risk Management Agent**: Handles risk assessment, mitigation, and risk frameworks.
 - 🔀 **Agent Router**: Directs queries based on keywords or intent to the appropriate agent.
 - 📚 **RAG (Retrieval-Augmented Generation)**: All agents use vectorized document embeddings to enrich LLM responses.
 - 💻 **Streamlit Front-End**: Features modern UI, enables file input, interactive query, and PDF/Word report generation.
@@ -41,6 +62,8 @@ agentic_ai_prototype/
 ├── agents/                 # LLM Agents
 │   ├── cyber_agent.py
 │   ├── grc_agent.py
+│   ├── attack_surface_agent.py
+│   ├── risk_management_agent.py
 │   └── shared_tools.py
 │
 ├── config/
@@ -56,6 +79,21 @@ agentic_ai_prototype/
 ├── Dockerfile              # For building the container image
 └── README.md               # This file
 ```
+
+---
+
+## 🧑‍💻 Using the App
+
+- **Agent Selection:**
+  - Choose "Auto-select Agent" to let the system pick the best agent for your query.
+  - Or, select a specific agent: Cyber, GRC, Attack Surface, or Risk Management.
+- **Sample Prompts:**
+  - Scroll to the "Click a Sample Prompt" section.
+  - Click any prompt under Cyber, GRC, Attack Surface, or Risk Management to instantly run a test query.
+- **Community Search History:**
+  - See recent queries and which agent responded in the sidebar.
+- **Footer Links:**
+  - Buy Me a Coffee and GitHub source code links are now at the bottom of the page.
 
 ---
 
