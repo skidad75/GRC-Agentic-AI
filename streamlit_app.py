@@ -224,6 +224,42 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# Add Test Prompts Section
+st.subheader("📋 Sample Prompts")
+st.markdown("Click any prompt below to quickly get started:")
+
+# Create three columns for the prompts
+col1, col2, col3 = st.columns(3)
+
+# Define the prompts
+test_prompts = [
+    "Evaluate whether this cloud-hosted patient portal is HIPAA-compliant.",
+    "Perform a NIST CSF gap analysis for the uploaded system architecture.",
+    "Which controls from HITRUST apply to a mobile health application?",
+    "Assess the risk posture of an IoT-connected blood pressure monitor.",
+    "Generate a summary of technical safeguards based on HIPAA §164.312.",
+    "Analyze this architecture for attack vectors under MITRE ATT&CK.",
+    "Is role-based access control (RBAC) configured according to Providence policies?",
+    "Identify any AI-specific risks in this ML-based clinical decision support tool.",
+    "What GRC implications arise from using public cloud for PHI storage?",
+    "Provide an audit checklist for SOC 2 Type II compliance.",
+    "How would an internal red team test this external-facing API?",
+    "Flag any gaps between this solution and OWASP Top 10 requirements.",
+    "Review this vendor's service for third-party risk classification.",
+    "Map this deployment to ISO 27001 Annex A control categories.",
+    "Does this solution architecture align with Providence's AI governance framework?"
+]
+
+# Distribute prompts across columns
+prompts_per_column = len(test_prompts) // 3
+for i, prompt in enumerate(test_prompts):
+    col = col1 if i < prompts_per_column else (col2 if i < 2 * prompts_per_column else col3)
+    if col.button(prompt, key=f"prompt_{i}", use_container_width=True):
+        st.session_state.last_query = prompt
+        st.rerun()
+
+st.markdown("---")
+
 # Initialize session state for community searches if it doesn't exist
 if 'community_searches' not in st.session_state:
     st.session_state.community_searches = load_community_searches()
