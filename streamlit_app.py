@@ -3,7 +3,7 @@ import sys
 import streamlit as st
 
 # Set up the Streamlit page - MUST be the first Streamlit command
-st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
+#st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
 
 # Stronger CSS for top whitespace and header styling
 st.markdown(
