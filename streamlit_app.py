@@ -243,6 +243,14 @@ if st.secrets.get("monitoring", {}).get("enabled", False):
     health_check_thread = threading.Thread(target=run_health_check, daemon=True)
     health_check_thread.start()
 
+# Initialize session state for community searches if it doesn't exist
+if 'community_searches' not in st.session_state:
+    st.session_state['community_searches'] = load_community_searches()
+if 'last_query' not in st.session_state:
+    st.session_state['last_query'] = ""
+if 'user_query' not in st.session_state:
+    st.session_state['user_query'] = ""
+
 # Set up the Streamlit page
 st.title("🧠 Cyber GRC Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
@@ -259,8 +267,8 @@ st.markdown("""
 # Sidebar for community searches
 with st.sidebar:
     st.subheader("🔍 Community Search History")
-    if st.session_state.community_searches:
-        for search in st.session_state.community_searches[:10]:  # Show first 10 searches (most recent)
+    if st.session_state['community_searches']:
+        for search in st.session_state['community_searches'][:10]:  # Show first 10 searches (most recent)
             st.markdown(f"*{search['query']}*")
             agent_info = search.get('agent', 'Unknown')
             if agent_info == 'Unknown' and 'kb_choice' in search:
