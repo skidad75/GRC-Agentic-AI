@@ -20,25 +20,32 @@ st.components.v1.html(
     width=0
 )
 
-# Custom CSS for compact layout
+# Custom CSS for compact layout and consistent fonts
 st.markdown(
     '''<style>
     /* Remove whitespace above the main page header and shift content up */
     .main .block-container { padding-top: 0 !important; margin-top: 0 !important; }
     .main .block-container > *:first-child { margin-top: 0 !important; }
-    h1, .stMarkdown h1 { margin-top: 0 !important; }
-    /* Compact main content and sidebar */
-    .stButton > button { margin-bottom: 0.1rem !important; padding: 0.2rem 0.4rem !important; font-size: 0.9rem !important; min-height: 1.7em !important; }
-    .stTextInput > div > div > input { padding: 0.2rem 0.4rem !important; font-size: 0.98rem !important; }
+    h1, .stMarkdown h1 { margin-top: 0 !important; font-size: 2.4rem !important; font-weight: 800 !important; font-family: 'Segoe UI', 'Arial', sans-serif !important; }
+    /* Increase main header by 20% (default is 2rem, now 2.4rem) */
+    .stMarkdown h2, h2, .stMarkdown h3, h3, .stMarkdown h4, h4 {
+        font-family: 'Segoe UI', 'Arial', sans-serif !important;
+        font-size: 1.25rem !important;
+        font-weight: 600 !important;
+        margin-top: 0.1rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+    .stRadio label, .stTextInput label, .stButton > button, .stMarkdown p, p {
+        font-family: 'Segoe UI', 'Arial', sans-serif !important;
+        font-size: 1.05rem !important;
+    }
+    .stButton > button { margin-bottom: 0.1rem !important; padding: 0.2rem 0.4rem !important; min-height: 1.7em !important; }
+    .stTextInput > div > div > input { padding: 0.2rem 0.4rem !important; font-size: 1.05rem !important; }
     .stRadio > div { gap: 0.3rem !important; }
-    .stRadio label { font-size: 0.93rem !important; margin-bottom: 0.1rem !important; }
-    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, h1, h2, h3, h4 { margin-bottom: 0.2rem !important; margin-top: 0.2rem !important; font-size: 1.1rem !important; line-height: 1.2 !important; }
-    .stMarkdown p, p { margin-bottom: 0.1rem !important; margin-top: 0.1rem !important; }
     .stSidebar .block-container { padding-top: 0.2rem !important; padding-bottom: 0.2rem !important; }
     .stSidebar .stMarkdown { margin-bottom: 0.1rem !important; }
     .stSidebar h2, .stSidebar h3, .stSidebar h4 { margin-bottom: 0.1rem !important; margin-top: 0.1rem !important; font-size: 1rem !important; }
     .stSidebar p { margin-bottom: 0.05rem !important; margin-top: 0.05rem !important; }
-    /* Remove extra space below horizontal rules */
     hr { margin: 0.3rem 0 !important; }
     </style>''',
     unsafe_allow_html=True
