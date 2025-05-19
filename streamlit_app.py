@@ -13,119 +13,72 @@ from datetime import datetime
 # Stronger CSS for top whitespace and header styling
 st.markdown(
     '''<style>
-    /* Reduce overall padding and margins */
+    /* Basic container adjustments */
     .main .block-container { 
-        padding-top: 0 !important; 
+        padding-top: 1rem !important; 
         margin-top: 0 !important;
-        padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
     }
     
-    /* Compact header styling */
+    /* Header styling */
     .main .block-container h1, .main .block-container h1:first-child {
         margin-top: 0 !important;
         padding-top: 0 !important;
-        margin-bottom: 0.5rem !important;
-        font-size: 2rem !important;
+        font-size: 2.2rem !important;
         font-weight: 800 !important;
         font-family: 'Segoe UI', 'Arial', sans-serif !important;
-        line-height: 1.1 !important;
+        line-height: 1.2 !important;
     }
     
-    /* Compact subheaders */
+    /* Subheaders */
     .stMarkdown h2, h2, .stMarkdown h3, h3, .stMarkdown h4, h4 {
         font-family: 'Segoe UI', 'Arial', sans-serif !important;
-        font-size: 1.1rem !important;
+        font-size: 1.2rem !important;
         font-weight: 600 !important;
-        margin-top: 0.5rem !important;
-        margin-bottom: 0.3rem !important;
+        margin-top: 1rem !important;
+        margin-bottom: 0.5rem !important;
     }
     
-    /* Compact form elements */
+    /* Form elements */
     .stRadio label, .stTextInput label, .stButton > button, .stMarkdown p, p {
         font-family: 'Segoe UI', 'Arial', sans-serif !important;
-        font-size: 0.95rem !important;
-        margin-bottom: 0.2rem !important;
+        font-size: 1rem !important;
     }
     
-    /* Compact buttons */
+    /* Buttons */
     .stButton > button { 
-        margin-bottom: 0.1rem !important; 
-        padding: 0.1rem 0.3rem !important; 
-        min-height: 1.5em !important;
-        font-size: 0.95rem !important;
+        margin: 0.2rem 0 !important;
+        padding: 0.3rem 0.6rem !important;
     }
     
-    /* Compact text inputs */
+    /* Text inputs */
     .stTextInput > div > div > input { 
-        padding: 0.1rem 0.3rem !important; 
-        font-size: 0.95rem !important;
-        min-height: 1.5em !important;
+        padding: 0.3rem 0.6rem !important;
     }
     
-    /* Compact radio buttons */
+    /* Radio buttons */
     .stRadio > div { 
-        gap: 0.2rem !important;
-        margin-bottom: 0.2rem !important;
+        gap: 0.5rem !important;
     }
     
-    /* Compact sidebar */
+    /* Sidebar */
     .stSidebar .block-container { 
-        padding-top: 0.1rem !important; 
-        padding-bottom: 0.1rem !important;
-    }
-    .stSidebar .stMarkdown { 
-        margin-bottom: 0.05rem !important;
-        font-size: 0.9rem !important;
-    }
-    .stSidebar h2, .stSidebar h3, .stSidebar h4 { 
-        margin-bottom: 0.05rem !important; 
-        margin-top: 0.05rem !important; 
-        font-size: 0.95rem !important;
-    }
-    .stSidebar p { 
-        margin-bottom: 0.03rem !important; 
-        margin-top: 0.03rem !important;
-        font-size: 0.9rem !important;
+        padding-top: 1rem !important;
     }
     
-    /* Compact dividers */
+    /* Dividers */
     hr { 
-        margin: 0.2rem 0 !important;
+        margin: 1rem 0 !important;
     }
     
-    /* Compact form spacing */
+    /* Form spacing */
     .stForm {
-        padding: 0.5rem !important;
-        margin-bottom: 0.2rem !important;
+        padding: 1rem !important;
     }
     
-    /* Compact success/error messages */
+    /* Success/error messages */
     .stSuccess, .stError, .stWarning, .stInfo {
-        padding: 0.2rem !important;
-        margin: 0.2rem 0 !important;
-    }
-    
-    /* Compact sample prompts section */
-    .stMarkdown div[data-testid="stMarkdownContainer"] {
-        margin-bottom: 0.2rem !important;
-    }
-    
-    /* Compact footer */
-    footer {
-        padding: 0.2rem !important;
-        margin: 0.2rem 0 !important;
-    }
-    
-    /* Reduce spacing between elements */
-    .element-container {
-        margin-bottom: 0.2rem !important;
-    }
-    
-    /* Make the main content area more compact */
-    .main .block-container > div {
-        padding-top: 0.2rem !important;
-        padding-bottom: 0.2rem !important;
+        padding: 0.5rem !important;
+        margin: 0.5rem 0 !important;
     }
     </style>''',
     unsafe_allow_html=True
@@ -133,7 +86,7 @@ st.markdown(
 
 # Use inline HTML for the main header for guaranteed size and style
 st.markdown("""
-<h1 style='margin-top:0;padding-top:0;font-size:2rem;font-weight:800;font-family:Segoe UI,Arial,sans-serif;line-height:1.1;margin-bottom:0.5rem;'>🧠 Cyber GRC Agentic AI Assistant</h1>
+<h1 style='margin-top:0;padding-top:0;font-size:2.2rem;font-weight:800;font-family:Segoe UI,Arial,sans-serif;line-height:1.2;'>🧠 Cyber GRC Agentic AI Assistant</h1>
 """, unsafe_allow_html=True)
 
 # Auto-collapse the sidebar on page load (unofficial JS hack)
