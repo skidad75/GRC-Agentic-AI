@@ -308,18 +308,6 @@ if 'user_agent' not in st.session_state or not st.session_state['user_agent']:
 st.title("🧠 Cyber GRC Agentic AI Assistant")
 st.markdown("Ask a question related to cybersecurity or GRC.")
 
-# Add a link to the Community Search History page
-st.markdown("""
-<div style='text-align: right; margin-bottom: 0.2rem;'>
-    <a href="/community_search_history" target="_self" style="font-size: 1rem; text-decoration: none;">
-        📜 View Community Search History
-    </a>
-</div>
-""", unsafe_allow_html=True)
-
-# Sidebar for community searches
-# The community search history is now only available on its own page.
-
 st.subheader("Ask the Cyber or GRC Knowledge Base")
 
 # Agent selection with auto-select option
