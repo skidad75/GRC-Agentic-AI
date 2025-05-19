@@ -1,19 +1,6 @@
 import os
 import sys
 import streamlit as st
-import requests
-import time
-from datetime import datetime
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-import threading
-import json
-import pathlib
-import streamlit.components.v1 as components
-import subprocess
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 
 # Set up the Streamlit page - MUST be the first Streamlit command
 #st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
@@ -473,39 +460,4 @@ st.markdown("""
         <img src="https://img.shields.io/badge/GitHub-Source%20Code-blue?style=for-the-badge&logo=github" alt="GitHub">
     </a>
 </div>
-""", unsafe_allow_html=True)
-
-# Initialize FastAPI app
-app = FastAPI()
-
-@app.post("/send_alert")
-async def send_alert(request: Request):
-    try:
-        data = await request.json()
-        subject = data.get("subject", "App Alert")
-        message = data.get("message", "No message provided")
-        
-        sender_email = "skidad75@gmail.com"
-        receiver_email = "skidad75@gmail.com"
-        password = st.secrets["email"]["password"]
-
-        msg = MIMEMultipart()
-        msg['From'] = sender_email
-        msg['To'] = receiver_email
-        msg['Subject'] = subject
-
-        msg.attach(MIMEText(message, 'plain'))
-
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, password)
-        text = msg.as_string()
-        server.sendmail(sender_email, receiver_email, text)
-        server.quit()
-        
-        return JSONResponse(content={"status": "success"})
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"status": "error", "message": str(e)}
-        ) 
+""", unsafe_allow_html=True) 

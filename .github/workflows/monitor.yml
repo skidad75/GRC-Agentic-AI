@@ -16,9 +16,12 @@ jobs:
           response=$(curl -s -o /dev/null -w "%{http_code}" https://cybergrc-agent.streamlit.app/)
           if [ "$response" != "200" ]; then
             echo "App is not responding correctly. Status code: $response"
-            # Send email notification
-            curl -X POST https://cybergrc-agent.streamlit.app/send_alert \
-              -H "Content-Type: application/json" \
-              -d '{"subject": "🚨 App Health Check Failed", "message": "The app is not responding correctly. Status code: '"$response"'\nTime: '"$(date)"'"}'
+            # Send email using curl to Gmail SMTP
+            curl -s --url 'smtp://smtp.gmail.com:587' \
+              --mail-from 'skidad75@gmail.com' \
+              --mail-rcpt 'skidad75@gmail.com' \
+              --ssl-reqd \
+              --user 'skidad75@gmail.com:${{ secrets.EMAIL_PASSWORD }}' \
+              --upload-file <(echo -e "Subject: 🚨 App Health Check Failed\n\nThe app is not responding correctly. Status code: $response\nTime: $(date)")
             exit 1
           fi 
