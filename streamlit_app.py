@@ -23,6 +23,8 @@ st.components.v1.html(
 # Custom CSS for compact layout
 st.markdown(
     '''<style>
+    /* Hide the Streamlit sidebar entirely */
+    section[data-testid="stSidebar"] { width: 0 !important; min-width: 0 !important; max-width: 0 !important; overflow: hidden !important; display: none !important; }
     /* Remove whitespace above the main page header */
     .main .block-container { padding-top: 0 !important; margin-top: 0 !important; }
     .main .block-container h1:first-child { margin-top: 0 !important; }
