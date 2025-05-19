@@ -309,7 +309,7 @@ agent_mode = st.radio(
 )
 
 if agent_mode == "Use Specific Agent":
-    kb_choice = st.radio("Choose a knowledge base:", ["Cyber", "GRC"])
+    kb_choice = st.radio("Choose a knowledge base:", ["Cyber", "GRC", "Attack Surface", "Risk Management"])
 else:
     kb_choice = None
 
@@ -334,34 +334,20 @@ if query_to_use:
             st.markdown(result["response"])
     else:
         # Use specific agent based on selection
-        if RAG_AVAILABLE:
-            with st.spinner("Retrieving answer from curated docs..."):
-                try:
-                    if kb_choice == "Cyber":
-                        st.info("🔍 Searching Cyber knowledge base...")
-                        response = cyber_query_engine.query(user_query)
-                        agent_used = "Cyber RAG"
-                    else:
-                        st.info("🔍 Searching GRC knowledge base...")
-                        response = grc_query_engine.query(user_query)
-                        agent_used = "GRC RAG"
-                    st.success("✅ Found relevant information in knowledge base")
-                    st.write(response.response)
-                except Exception as e:
-                    st.warning(f"RAG search failed: {str(e)}")
-                    st.warning("Falling back to agent-based search...")
-                    # Force the specific agent
-                    result = route_query(user_query, force_agent=kb_choice.lower())
-                    agent_used = result['agent']
-                    st.success(f"Response from {agent_used.upper()} Agent")
-                    st.markdown(result["response"])
-        else:
-            # Use agent-based search with forced agent
-            with st.spinner("Thinking..."):
-                result = route_query(user_query, force_agent=kb_choice.lower())
-                agent_used = result['agent']
-                st.success(f"Response from {agent_used.upper()} Agent")
-                st.markdown(result["response"])
+        force_agent = None
+        if kb_choice == "Cyber":
+            force_agent = "cyber"
+        elif kb_choice == "GRC":
+            force_agent = "grc"
+        elif kb_choice == "Attack Surface":
+            force_agent = "attack_surface"
+        elif kb_choice == "Risk Management":
+            force_agent = "risk_management"
+        with st.spinner("Thinking..."):
+            result = route_query(user_query, force_agent=force_agent)
+            agent_used = result['agent']
+            st.success(f"Response from {agent_used.upper()} Agent")
+            st.markdown(result["response"])
 
     # Update community search history if it's a new query
     if user_query != st.session_state['last_query']:
