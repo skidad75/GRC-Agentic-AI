@@ -8,8 +8,10 @@ st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
 # Custom CSS for compact layout
 st.markdown(
     '''<style>
+    /* Remove whitespace above the main page header */
+    .main .block-container { padding-top: 0 !important; margin-top: 0 !important; }
+    .main .block-container h1:first-child { margin-top: 0 !important; }
     /* Compact main content and sidebar */
-    .main .block-container { padding-top: 0.5rem !important; padding-bottom: 0.2rem !important; }
     .stButton > button { margin-bottom: 0.1rem !important; padding: 0.2rem 0.4rem !important; font-size: 0.9rem !important; min-height: 1.7em !important; }
     .stTextInput > div > div > input { padding: 0.2rem 0.4rem !important; font-size: 0.98rem !important; }
     .stRadio > div { gap: 0.3rem !important; }
@@ -370,8 +372,7 @@ if query_to_use:
 
 # Add Sample Prompts Section BELOW the main query input and logic
 st.markdown("---")
-st.subheader("📋 Sample Prompts")
-st.markdown("Click any prompt below to quickly get started:")
+st.subheader("🖱️ Click a Sample Prompt")
 
 # Define prompts for each discipline
 cyber_prompts = [
