@@ -61,12 +61,6 @@ except Exception as e:
     # Handle other potential errors silently
     RAG_AVAILABLE = False
 
-# Add a tag to indicate which approach is being used
-if RAG_AVAILABLE:
-    st.sidebar.markdown("🔍 Using RAG-based search")
-else:
-    st.sidebar.markdown("🤖 Using agent-based search")
-
 def get_public_ip():
     """
     Retrieve the public IP address of the client machine using an external API.
