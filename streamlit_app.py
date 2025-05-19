@@ -8,18 +8,20 @@ st.set_page_config(page_title="Cyber GRC Agentic AI", layout="wide")
 # Custom CSS for compact layout
 st.markdown(
     '''<style>
-    /* Reduce padding and margins for main content */
-    .main .block-container { padding-top: 1.2rem; padding-bottom: 0.5rem; }
-    .stButton > button { margin-bottom: 0.2rem; padding: 0.3rem 0.5rem; font-size: 0.92rem; }
-    .stTextInput > div > div > input { padding: 0.3rem 0.5rem; font-size: 1rem; }
-    .stRadio > div { gap: 0.5rem; }
-    .stRadio label { font-size: 0.95rem; }
-    .stMarkdown h2, .stMarkdown h3, .stMarkdown h4 { margin-bottom: 0.3rem; margin-top: 0.3rem; font-size: 1.1rem; }
-    .stMarkdown p { margin-bottom: 0.2rem; margin-top: 0.2rem; }
-    .stSidebar .block-container { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-    .stSidebar .stMarkdown { margin-bottom: 0.2rem; }
-    .stSidebar h2, .stSidebar h3, .stSidebar h4 { margin-bottom: 0.2rem; margin-top: 0.2rem; font-size: 1rem; }
-    .stSidebar p { margin-bottom: 0.1rem; margin-top: 0.1rem; }
+    /* Compact main content and sidebar */
+    .main .block-container { padding-top: 0.5rem !important; padding-bottom: 0.2rem !important; }
+    .stButton > button { margin-bottom: 0.1rem !important; padding: 0.2rem 0.4rem !important; font-size: 0.9rem !important; min-height: 1.7em !important; }
+    .stTextInput > div > div > input { padding: 0.2rem 0.4rem !important; font-size: 0.98rem !important; }
+    .stRadio > div { gap: 0.3rem !important; }
+    .stRadio label { font-size: 0.93rem !important; margin-bottom: 0.1rem !important; }
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, h1, h2, h3, h4 { margin-bottom: 0.2rem !important; margin-top: 0.2rem !important; font-size: 1.1rem !important; line-height: 1.2 !important; }
+    .stMarkdown p, p { margin-bottom: 0.1rem !important; margin-top: 0.1rem !important; }
+    .stSidebar .block-container { padding-top: 0.2rem !important; padding-bottom: 0.2rem !important; }
+    .stSidebar .stMarkdown { margin-bottom: 0.1rem !important; }
+    .stSidebar h2, .stSidebar h3, .stSidebar h4 { margin-bottom: 0.1rem !important; margin-top: 0.1rem !important; font-size: 1rem !important; }
+    .stSidebar p { margin-bottom: 0.05rem !important; margin-top: 0.05rem !important; }
+    /* Remove extra space below horizontal rules */
+    hr { margin: 0.3rem 0 !important; }
     </style>''',
     unsafe_allow_html=True
 )
