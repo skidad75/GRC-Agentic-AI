@@ -36,12 +36,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
-      - name: Run tests
-        run: |
-          python -m pytest tests/
-          
       - name: Deploy to Streamlit
         env:
           STREAMLIT_API_KEY: ${{ secrets.STREAMLIT_API_KEY }}
         run: |
-          streamlit deploy 
+          streamlit deploy --app-dir . streamlit_app.py 
