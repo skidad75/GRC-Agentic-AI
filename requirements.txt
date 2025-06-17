@@ -1,7 +1,10 @@
 streamlit==1.45.0
-openai==1.12.0
 python-dotenv==1.0.1
 llama_index_readers_file
+openai==1.10.0
+llama-index-core==0.9.48
+llama-index-llms-openai==0.1.9
+langchain==0.1.7
 beautifulsoup4>=4.12.3
 requests==2.31.0
 langchain==0.1.7
@@ -13,7 +16,5 @@ streamlit-option-menu==0.4.0
 streamlit-chat==0.1.1
 streamlit-ace==0.1.1
 streamlit-autorefresh==1.0.1
-llama-index-core>=0.10.0
-llama-index-llms-openai>=0.1.0
 pypdf
 -e .
