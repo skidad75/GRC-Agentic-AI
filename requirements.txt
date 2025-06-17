@@ -1,8 +1,9 @@
 streamlit==1.45.0
 openai==1.12.0
 python-dotenv==1.0.1
+llama_index_readers_file
+beautifulsoup4
 requests==2.31.0
-beautifulsoup4==4.12.2
 langchain==0.1.7
 tiktoken==0.5.2
 plotly==5.19.0
@@ -14,6 +15,5 @@ streamlit-ace==0.1.1
 streamlit-autorefresh==1.0.1
 llama-index-core>=0.10.0
 llama-index-llms-openai>=0.1.0
-llama-index-readers-file>=0.1.0
 pypdf
 -e .
