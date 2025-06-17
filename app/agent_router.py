@@ -8,7 +8,6 @@ import httpx
 from openai import OpenAI
 import streamlit as st
 
-client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 def route_query(query: str, force_agent: str = None) -> dict:
     # If an agent is forced, use it directly
     if force_agent:
