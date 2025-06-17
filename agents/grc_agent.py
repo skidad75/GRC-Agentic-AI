@@ -1,5 +1,4 @@
-import openai
-from openai import OpenAIError
+from openai import OpenAI, OpenAIError
 import os
 from dotenv import load_dotenv
 from agents.shared_tools import query_vector_db, format_rag_prompt
@@ -13,17 +12,19 @@ GRC_FALLBACK_RESPONSES = {
     "compliance": "Compliance refers to adhering to laws, regulations, standards, and ethical practices that apply to an organization's operations.",
     "risk": "Risk management involves identifying, assessing, and controlling threats to an organization's capital and earnings.",
     "audit": "An audit is a systematic examination of records, statements, or other evidence to verify compliance with established standards.",
-    "default": "I understand you're asking about GRC (Governance, Risk, and Compliance). While I'm currently unable to provide a detailed response due to API limitations, I can tell you that GRC is a framework that helps organizations align their IT activities with business goals, manage risks effectively, and meet regulatory requirements."
+    "default": "I understand you're asking about GRC (Governance, Risk, and Compliance). GRC is a framework that helps organizations align their IT activities with business goals, manage risks effectively, and meet regulatory requirements."
 }
 
 def handle_grc_query(query: str, context: dict = None) -> str:
     try:
-        # Get API key from Streamlit secrets
+        # Use Streamlit secrets to retrieve API key
         api_key = st.secrets["openai"]["api_key"]
         if not api_key:
             raise ValueError("OpenAI API key not found in Streamlit secrets")
-            
-        client = openai.OpenAI(api_key=api_key)
+
+        # Use new OpenAI client interface
+        client = OpenAI(api_key=api_key)
+
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -32,13 +33,13 @@ def handle_grc_query(query: str, context: dict = None) -> str:
             ]
         )
         return response.choices[0].message.content
+
     except OpenAIError as e:
         if "insufficient_quota" in str(e):
-            # Try to match query with fallback responses
             query_lower = query.lower()
-            for key, response in GRC_FALLBACK_RESPONSES.items():
+            for key, fallback in GRC_FALLBACK_RESPONSES.items():
                 if key in query_lower:
-                    return response
+                    return fallback
             return GRC_FALLBACK_RESPONSES["default"]
         else:
             return f"I apologize, but I encountered an error while processing your request: {str(e)}"
