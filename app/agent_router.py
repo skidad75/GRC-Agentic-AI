@@ -6,7 +6,7 @@ from openai import OpenAI
 import httpx
 
 client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
+    api_key="OPENAI_API_KEY",
     http_client=httpx.Client()  # no proxies unless explicitly needed
 )
 def route_query(query: str, force_agent: str = None) -> dict:
