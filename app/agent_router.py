@@ -5,10 +5,10 @@ from agents.risk_management_agent import handle_risk_management_query
 from openai import OpenAI
 import httpx
 
-client = OpenAI(
-    api_key="OPENAI_API_KEY",
-    http_client=httpx.Client()  # no proxies unless explicitly needed
-)
+from openai import OpenAI
+import streamlit as st
+
+client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 def route_query(query: str, force_agent: str = None) -> dict:
     # If an agent is forced, use it directly
     if force_agent:
