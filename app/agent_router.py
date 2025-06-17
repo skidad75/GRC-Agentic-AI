@@ -2,7 +2,13 @@ from agents.cyber_agent import handle_cyber_query
 from agents.grc_agent import handle_grc_query
 from agents.attack_surface_agent import handle_attack_surface_query
 from agents.risk_management_agent import handle_risk_management_query
+from openai import OpenAI
+import httpx
 
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    http_client=httpx.Client()  # no proxies unless explicitly needed
+)
 def route_query(query: str, force_agent: str = None) -> dict:
     # If an agent is forced, use it directly
     if force_agent:
