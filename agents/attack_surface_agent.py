@@ -12,7 +12,7 @@ def handle_attack_surface_query(query: str, context: dict = None) -> str:
         str: The agent's response.
     """
     try:
-        api_key = st.secrets["openai"]["api_key"]
+        client = OpenAI(api_key=st.secrets["openai"]["api_key"])
         if not api_key:
             raise ValueError("OpenAI API key not found in Streamlit secrets")
 
