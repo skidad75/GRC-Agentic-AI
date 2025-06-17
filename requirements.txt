@@ -1,9 +1,8 @@
 streamlit==1.45.0
 python-dotenv==1.0.1
-llama_index_readers_file
-openai==1.10.0
-llama-index-core==0.9.48
-llama-index-llms-openai==0.1.9
+openai==1.12.0
+llama-index-core==0.10.43
+llama-index-llms-openai==0.1.13
 langchain==0.1.7
 beautifulsoup4>=4.12.3
 requests==2.31.0
