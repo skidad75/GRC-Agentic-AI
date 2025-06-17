@@ -41,3 +41,4 @@ def handle_cyber_query(query: str, context: dict = None) -> str:
             return f"I apologize, but I encountered an error while processing your request: {str(e)}"
     except Exception as e:
         return f"An unexpected error occurred: {str(e)}"
+        
