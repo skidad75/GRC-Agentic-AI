@@ -9,7 +9,7 @@ setup(
         "openai==1.12.0",
         "python-dotenv==1.0.1",
         "requests==2.31.0",
-        "beautifulsoup4==4.12.2",
+        "beautifulsoup4>=4.12.3,<5.0.0",
         "langchain==0.1.7",
         "tiktoken==0.5.2",
         "plotly==5.19.0",
