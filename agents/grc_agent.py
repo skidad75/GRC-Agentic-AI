@@ -23,7 +23,7 @@ def handle_grc_query(query: str, context: dict = None) -> str:
             raise ValueError("OpenAI API key not found in Streamlit secrets")
 
         # Use new OpenAI client interface
-        client = OpenAI(api_key=api_key)
+        client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
