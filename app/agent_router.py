@@ -3,7 +3,6 @@ from agents.grc_agent import handle_grc_query
 from agents.attack_surface_agent import handle_attack_surface_query
 from agents.risk_management_agent import handle_risk_management_query
 from openai import OpenAI
-import httpx
 
 from openai import OpenAI
 import streamlit as st
