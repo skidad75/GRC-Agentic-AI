@@ -192,7 +192,7 @@ The project includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) 
 
 ## 📞 Support
 
-For questions or issues, please contact the Healthcare Organization IT Security Team.
+See https://www.linkedin.com/in/ryascott/ for development requests
 
 ---
 
